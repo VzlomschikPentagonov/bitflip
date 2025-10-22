@@ -6,3 +6,4 @@ PREV: int = -1
 LOOP_END: int = -1
 OFF: int = 173
 HALT: str = 'h'
+CHAR_SET: str = "!<>[]"

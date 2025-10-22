@@ -12,4 +12,4 @@ def print_data(program_str: str,
                steps: int) -> None:
     print('\n', program_str, '\n',
           display_pointer_p(length, pos_p), '\n',
-          f'{chr(OFF + cell)}, {pos_t}, {pos_p}, {steps}, ', sep='')
+          f'{chr(OFF + cell)}, {pos_t}, {pos_p}, {steps}', sep='')

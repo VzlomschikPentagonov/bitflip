@@ -15,8 +15,24 @@ def read_input_file() -> tuple[int, str]:
 
 def clean_str(program_str: str) -> str:
     new_str: str = ""
-    for char in program_str:
-        match char:
+    i: int = 0
+    sub_string: str = ""
+    repeat: str = ""
+    while i < len(program_str):
+        match program_str[i]:
             case '!' | '<' | '>' | '[' | ']':
-                new_str += char
+                new_str += program_str[i]
+            case '{':
+                i += 1
+                while program_str[i] != ',':
+                    if program_str[i] in CHAR_SET:
+                        sub_string += program_str[i]
+                    i += 1
+                while program_str[i] != '}':
+                    if program_str[i].isdigit():
+                        repeat += program_str[i]
+                    i += 1
+                new_str += sub_string * int(repeat)
+                sub_string, repeat = "", ""
+        i += 1
     return new_str
