@@ -11,4 +11,5 @@ def load_file(name: str) -> None:
     input_file: TextIO = open("input.txt", "w+t")
     read_file: TextIO = open(f"./code/{name}.bflp")
     load_file_data: list[str] = read_file.readlines()
+    load_file_data[0:0] = [""]
     input_file.write("2\n" + get_code(load_file_data))
