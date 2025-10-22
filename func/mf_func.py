@@ -1,5 +1,5 @@
 from typing import TextIO
-from b_func import get_code
+from bitflip.func.b_parser import get_code
 
 def make_file(name: str) -> None:
     input_file: TextIO = open("input.txt")

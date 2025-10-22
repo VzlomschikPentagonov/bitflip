@@ -1,4 +1,4 @@
-from mf_func import *
+from func.mf_func import *
 
 def main() -> None:
     name: str = input("Input name:")

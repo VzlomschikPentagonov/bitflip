@@ -1,4 +1,5 @@
-from b_func import *
+from func.b_parser import *
+from func.b_intepreter import *
 
 def main() -> None:
     b_input: tuple[int, str] = read_input_file()

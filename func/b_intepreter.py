@@ -1,17 +1,5 @@
-from typing import TextIO
-from b_constants import *
-
-def get_code(input_file_data: list[str]) -> str:
-    program_str: str = ""
-    for line in input_file_data[STRIP_1ST_LINE:]:
-        program_str += line
-    return program_str
-
-def read_input_file() -> tuple[int, str]:
-    input_file: TextIO = open("input.txt")
-    input_file_data: list[str] = input_file.readlines()
-    return (int(input_file_data[NUM_STATES]),
-            get_code(input_file_data))
+from bitflip.func.b_parser import clean_str
+from bitflip.func.b_misc import *
 
 def get_addresses(program_str: str) -> tuple[dict[int, int], dict[int, int]]:
     open_br: dict[int, int] = {}
@@ -30,28 +18,6 @@ def get_addresses(program_str: str) -> tuple[dict[int, int], dict[int, int]]:
             open_br[char] = i
             closed_br[i + PREV] = char + NEXT
     return open_br, closed_br
-
-def display_pointer_p(length: int,
-                            pos: int) -> str:
-    return ' ' * pos + '^' + ' ' * (length - pos - 1)
-
-def print_data(program_str: str,
-               length: int,
-               pos_p: int,
-               pos_t: int,
-               cell: int,
-               steps: int) -> None:
-    print('\n', program_str, '\n',
-          display_pointer_p(length, pos_p), '\n',
-          f'{chr(OFF + cell)}, {pos_t}, {pos_p}, {steps}, ', sep='')
-
-def clean_str(program_str: str) -> str:
-    new_str: str = ""
-    for char in program_str:
-        match char:
-            case '!' | '<' | '>' | '[' | ']':
-                new_str += char
-    return new_str
 
 def goto(address_list: dict[int: int],
          addresses_start: dict[int: int],
