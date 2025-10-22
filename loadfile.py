@@ -1,8 +1,8 @@
 from func.mf_func import *
 
 def main() -> None:
-    name: str = input("Input filename:\n")
-    make_file(name)
+    name: str = input("Load file:\n")
+    load_file(name)
     return None
 
 if __name__ == "__main__":

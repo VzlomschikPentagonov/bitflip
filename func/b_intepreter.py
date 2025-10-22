@@ -53,10 +53,14 @@ def get_output(b_input: tuple[int, str],
                 pointer_t += 1
             case '[':
                 if tape[pointer_t] == 0:
-                    pointer_p, flag = goto(open_br, open_br_keys, pointer_p)
+                    pointer_p, flag = goto(open_br,
+                                           open_br_keys,
+                                           pointer_p)
             case ']':
                 if tape[pointer_t] != 0:
-                    pointer_p, flag = goto(closed_br, closed_br_keys, pointer_p)
+                    pointer_p, flag = goto(closed_br,
+                                           closed_br_keys,
+                                           pointer_p)
         if not flag:
             pointer_p += 1
         flag = False
