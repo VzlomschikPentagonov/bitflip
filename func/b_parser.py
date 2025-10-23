@@ -15,7 +15,7 @@ def read_input_file() -> tuple[int, str]:
             get_code(input_file_data))
 
 def get_sub_string(program_str: str,
-                   pos: int) -> tuple(int, str):
+                   pos: int) -> tuple[int, str]:
     sub_string: str = ""
     code: str = ""
     repeat: str = ""
@@ -23,13 +23,13 @@ def get_sub_string(program_str: str,
     while program_str[i] != '}':
         sub_string += program_str[i]
         i += 1
-    if match("^([!<>\\[\\]]+,\\d+)$", sub_string):
+    if match(RM_REPSTR, sub_string):
         for char in sub_string:
             if char in CHAR_SET:
                 code += char
             if char.isdigit():
                 repeat += char
-    elif match("^(\\w+,\\d+)$", sub_string, ASCII):
+    elif match(RM_DEFINE, sub_string, ASCII):
         for char in sub_string:
             if char in CHAR_SET:
                 code += char
@@ -45,7 +45,7 @@ def clean_str(program_str: str) -> str:
             case '!' | '<' | '>' | '[' | ']':
                 new_str += program_str[i]
             case '{':
-                i, sub_str = get_sub_string(program_str, program_str[i])
+                i, sub_str = get_sub_string(program_str, i)
                 new_str += sub_str
         i += 1
     return new_str
