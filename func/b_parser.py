@@ -45,6 +45,7 @@ def clean_str(program_str: str) -> str:
             case '!' | '<' | '>' | '[' | ']':
                 new_str += program_str[i]
             case '{':
-                i, new_str += get_sub_string(program_str, program_str[i])
+                i, sub_str = get_sub_string(program_str, program_str[i])
+                new_str += sub_str
         i += 1
     return new_str
