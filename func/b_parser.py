@@ -1,5 +1,5 @@
 from typing import TextIO
-from re import match
+from re import match, ASCII
 from bitflip.func.b_constants import *
 
 def get_code(input_file_data: list[str]) -> str:
@@ -17,30 +17,25 @@ def read_input_file() -> tuple[int, str]:
 def get_sub_string(program_str: str,
                    pos: int) -> tuple(int, str):
     sub_string: str = ""
+    code: str = ""
     repeat: str = ""
     i: int = pos + 1
-    if program_str[i].isidentifier():
-        while program_str[i] != '}':
-            if program_str[i].isidentifier():
-                sub_string += program_str[i]
-            # else:
-            #     ...
-            i += 1
-        if ',' in sub_string:
-            i_s: int = sub_string.index(',')
-    while program_str[i] != ',':
-        if program_str[i] in CHAR_SET:
-            sub_string += program_str[i]
-        # else:
-        #     ...
-        i += 1
     while program_str[i] != '}':
-        if program_str[i].isdigit():
-            repeat += program_str[i]
-        # else:
-        #     ...
+        sub_string += program_str[i]
         i += 1
-    return i, sub_string * int(repeat)
+    if match("^([!<>\\[\\]]+,\\d+)$", sub_string):
+        for char in sub_string:
+            if char in CHAR_SET:
+                code += char
+            if char.isdigit():
+                repeat += char
+    elif match("^(\\w+,\\d+)$", sub_string, ASCII):
+        for char in sub_string:
+            if char in CHAR_SET:
+                code += char
+            if char.isdigit():
+                repeat += char
+    return i, code * int(repeat)
 
 def clean_str(program_str: str) -> str:
     new_str: str = ""
