@@ -14,21 +14,27 @@ def read_input_file() -> tuple[int, str]:
     return (int(input_file_data[NUM_STATES]),
             get_code(input_file_data))
 
+def parse_define_line(line: str) -> tuple[str, str]:
+    define: str = ""
+    code: str = ""
+    char: int = 0
+    while line[char] != ':':
+        define += line[char]
+        char += 1
+    char += 1
+    for c_char in range(char + 1, len(line)):
+        code += line[c_char]
+    if code[-1] == '\n':
+        code = code[:-1]
+    return define, code
+
 def read_defines_file() -> dict[str, str]:
     input_file: TextIO = open("defines.txt")
     input_file_data: list[str] = input_file.readlines()
     defines: dict[str, str] = {}
     for line in input_file_data:
         if match(RM_DEFFILE, line):
-            define: str = ""
-            code: str = ""
-            char: int = 0
-            while line[char] != ':':
-                define += line[char]
-                char += 1
-            char += 1
-            for c_char in range(char + 1, len(line)):
-                code += line[c_char]
+            define, code = parse_define_line(line)
             defines[define] = code
     return defines
 

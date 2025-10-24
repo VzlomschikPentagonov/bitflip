@@ -31,7 +31,6 @@ def get_output(b_input: tuple[int, str],
                tape: list[int]) -> None:
     num_states: int = b_input[NUM_STATES]
     program_str: str = clean_str(b_input[PROGRAM_STR]) + HALT
-    print(clean_str(b_input[PROGRAM_STR]))
     program_str_len: int = len(program_str)
     pointer_t: int = len(tape) >> 1
     pointer_p: int = 0
