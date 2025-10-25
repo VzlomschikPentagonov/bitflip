@@ -1,4 +1,4 @@
-from bitflip.func.b_parser import clean_str
+from bitflip.func.b_parser import compile_program
 from bitflip.func.b_misc import *
 
 def get_addresses(program_str: str) -> tuple[dict[int, int], dict[int, int]]:
@@ -30,7 +30,7 @@ def goto(address_list: dict[int: int],
 def get_output(b_input: tuple[int, str],
                tape: list[int]) -> None:
     num_states: int = b_input[NUM_STATES]
-    program_str: str = clean_str(b_input[PROGRAM_STR]) + HALT
+    program_str: str = compile_program(b_input[PROGRAM_STR]) + HALT
     program_str_len: int = len(program_str)
     pointer_t: int = len(tape) >> 1
     pointer_p: int = 0
