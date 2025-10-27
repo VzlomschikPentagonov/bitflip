@@ -1,7 +1,8 @@
 from bitflip.func.b_parser import compile_program
 from bitflip.func.b_misc import *
 
-def get_addresses(program_str: str) -> tuple[dict[int, int], dict[int, int]]:
+def get_addresses(program_str: str) -> tuple[dict[int, int],
+                                             dict[int, int]]:
     open_br: dict[int, int] = {}
     closed_br: dict[int, int] = {}
     for char in range(len(program_str)):
