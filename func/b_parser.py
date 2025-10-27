@@ -38,8 +38,7 @@ def parse_define_line(line: str) -> tuple[str, str]:
     while line[char] != ':':
         define += line[char]
         char += 1
-    char += 1
-    for c_char in range(char + 1, len(line)):
+    for c_char in range(char + 2, len(line)):
         code += line[c_char]
     if code[-1] == '\n':
         code = code[:-1]
