@@ -83,6 +83,7 @@ def remove_brackets(code: str,
 
 def read_defines_file() -> dict[str, str]:
     input_file: TextIO = open("defines.txt")
+    max_nest_lvl: int = count_brackets(program_str)
     input_file_data: list[str] = input_file.readlines()
     defines: dict[str, str] = {}
     for line in input_file_data:
@@ -91,14 +92,14 @@ def read_defines_file() -> dict[str, str]:
             defines[define] = code
         elif match(RM_DEFFILE_BR, line):
             define, code = parse_define_line(line)
-            for nest_lvl in range(count_brackets(code), 0, -1):
+            for nest_lvl in range(max_nest_lvl, 0, -1):
                 code = remove_brackets(code, defines, nest_lvl)
             defines[define] = code
     return defines
 
 def get_br_string(program_str: str,
-                   pos: int,
-                   defines: dict[str, str]) -> tuple[int, str]:
+                  pos: int,
+                  defines: dict[str, str]) -> tuple[int, str]:
     sub_string: str = ""
     i: int = pos + 1
     while program_str[i] != '}':
@@ -108,14 +109,23 @@ def get_br_string(program_str: str,
 
 def compile_program(program_str: str) -> str:
     new_str: str = ""
-    i: int = 0
+    # i: int = 0
     defines: dict[str, str] = read_defines_file()
-    while i < len(program_str):
-        match program_str[i]:
+    max_nest_lvl: int = count_brackets(program_str)
+    for nest_lvl in range(max_nest_lvl, 0, -1):
+        program_str = remove_brackets(program_str, defines, nest_lvl)
+    # while i < len(program_str):
+        # match program_str[i]:
+        #     case '!' | '<' | '>' | '[' | ']':
+        #         new_str += program_str[i]
+            # case '{':
+            #     br_sum += 1
+            #     if br_sum == nest_lvl:
+            #         i, br_str = get_br_string(program_str, i, defines)
+            #     new_str += br_str
+        # i += 1
+    for char in program_str:
+        match char:
             case '!' | '<' | '>' | '[' | ']':
-                new_str += program_str[i]
-            case '{':
-                i, br_str = get_br_string(program_str, i, defines)
-                new_str += br_str
-        i += 1
+                new_str += char
     return new_str
