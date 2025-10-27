@@ -44,8 +44,8 @@ def parse_define_line(line: str) -> tuple[str, str]:
         code = code[:-1]
     return define, code
 
-def parse_bracket_string(string: str,
-                         defines: dict[str, str]) -> str:
+def parse_bracket_str(string: str,
+                      defines: dict[str, str]) -> str:
     code: str = ""
     repeat: str = ""
     if match(RM_REPSTR, string):
@@ -75,7 +75,7 @@ def remove_brackets(code: str,
             case '}':
                 br_sum -= 1
                 if br_sum == nest_lvl - 1:
-                    new_code += parse_bracket_string(string, defines)
+                    new_code += parse_bracket_str(string, defines)
                     string = ""
                     continue
         if br_sum == nest_lvl:
