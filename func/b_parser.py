@@ -14,19 +14,22 @@ def read_input_file() -> tuple[int, str]:
     return (int(input_file_data[NUM_STATES]),
             get_code(input_file_data))
 
-def count_brackets(line: str) -> bool:
+def count_brackets(line: str) -> int:
     br_sum: int = 0
+    nest: int = 0
     for char in line:
         match char:
             case '{':
                 br_sum += 1
+                if br_sum > nest:
+                    nest = br_sum
             case '}':
                 br_sum -= 1
-        if 2 <= br_sum <= -1:
-            return False
+        if br_sum < 0:
+            return -1
     if br_sum == 0:
-        return True
-    return False
+        return nest
+    return -1
 
 def parse_define_line(line: str) -> tuple[str, str]:
     define: str = ""
@@ -43,7 +46,7 @@ def parse_define_line(line: str) -> tuple[str, str]:
     return define, code
 
 def parse_bracket_string(string: str,
-                        defines: dict[str, str]) -> str:
+                         defines: dict[str, str]) -> str:
     if match(RM_REPSTR, string):
         for char in string:
             if s_char in CHAR_SET:
@@ -57,20 +60,24 @@ def parse_bracket_string(string: str,
                 return defines[define]
 
 def remove_brackets(code: str,
-                    defines: dict[str, str]) -> str:
-    string: str = ""
+                    defines: dict[str, str],
+                    nest_lvl: int) -> str:
     br_sum: int = 0
+    string: str = ""
     new_code: str = ""
     for char in code:
         match char:
-            case '{' | '}':
-                br_sum ^= 1
-                if br_sum == 0:
-                    string = string[1:]
+            case '{':
+                br_sum += 1
+                continue
+            case '}':
+                br_sum -= 1
+                if br_sum == nest_lvl - 1:
                     new_code += parse_bracket_string(string, defines)
-        if br_sum == 1:
+                    continue
+        if br_sum == nest_lvl:
             string += char
-        if br_sum == 0 and char != '}':
+        else:
             new_code += char
     return new_code
 
@@ -84,8 +91,8 @@ def read_defines_file() -> dict[str, str]:
             defines[define] = code
         elif match(RM_DEFFILE_BR, line):
             define, code = parse_define_line(line)
-            if count_brackets(code):
-                code = remove_brackets(code, defines)
+            for nest_lvl in range(count_brackets(code), 0, -1):
+                code = remove_brackets(code, defines, nest_lvl)
             defines[define] = code
     return defines
 
