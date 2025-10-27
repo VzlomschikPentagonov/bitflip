@@ -16,19 +16,19 @@ def read_input_file() -> tuple[int, str]:
 
 def count_brackets(line: str) -> int:
     br_sum: int = 0
-    nest: int = 0
+    max_nest_lvl: int = 0
     for char in line:
         match char:
             case '{':
                 br_sum += 1
-                if br_sum > nest:
-                    nest = br_sum
+                if br_sum > max_nest_lvl:
+                    max_nest_lvl = br_sum
             case '}':
                 br_sum -= 1
         if br_sum < 0:
             return -1
     if br_sum == 0:
-        return nest
+        return max_nest_lvl
     return -1
 
 def parse_define_line(line: str) -> tuple[str, str]:
@@ -46,17 +46,20 @@ def parse_define_line(line: str) -> tuple[str, str]:
 
 def parse_bracket_string(string: str,
                          defines: dict[str, str]) -> str:
+    code: str = ""
+    repeat: str = ""
     if match(RM_REPSTR, string):
         for char in string:
-            if s_char in CHAR_SET:
+            if char in CHAR_SET:
                 code += char
-            if s_char.isdigit():
+            if char.isdigit():
                 repeat += char
         return code * int(repeat)
     elif match(RM_DEFINE, string):
         for define in defines.keys():
             if string == define:
                 return defines[define]
+        return ""
 
 def remove_brackets(code: str,
                     defines: dict[str, str],
@@ -73,6 +76,7 @@ def remove_brackets(code: str,
                 br_sum -= 1
                 if br_sum == nest_lvl - 1:
                     new_code += parse_bracket_string(string, defines)
+                    string = ""
                     continue
         if br_sum == nest_lvl:
             string += char
@@ -82,8 +86,9 @@ def remove_brackets(code: str,
 
 def read_defines_file() -> dict[str, str]:
     input_file: TextIO = open("defines.txt")
-    max_nest_lvl: int = count_brackets(program_str)
     input_file_data: list[str] = input_file.readlines()
+    ifd_str: str = "".join(input_file_data)
+    max_nest_lvl: int = count_brackets(ifd_str)
     defines: dict[str, str] = {}
     for line in input_file_data:
         if match(RM_DEFFILE, line):
@@ -96,33 +101,12 @@ def read_defines_file() -> dict[str, str]:
             defines[define] = code
     return defines
 
-def get_br_string(program_str: str,
-                  pos: int,
-                  defines: dict[str, str]) -> tuple[int, str]:
-    sub_string: str = ""
-    i: int = pos + 1
-    while program_str[i] != '}':
-        sub_string += program_str[i]
-        i += 1
-    return parse_bracket_string(string, defines)
-
 def compile_program(program_str: str) -> str:
     new_str: str = ""
-    # i: int = 0
     defines: dict[str, str] = read_defines_file()
     max_nest_lvl: int = count_brackets(program_str)
     for nest_lvl in range(max_nest_lvl, 0, -1):
         program_str = remove_brackets(program_str, defines, nest_lvl)
-    # while i < len(program_str):
-        # match program_str[i]:
-        #     case '!' | '<' | '>' | '[' | ']':
-        #         new_str += program_str[i]
-            # case '{':
-            #     br_sum += 1
-            #     if br_sum == nest_lvl:
-            #         i, br_str = get_br_string(program_str, i, defines)
-            #     new_str += br_str
-        # i += 1
     for char in program_str:
         match char:
             case '!' | '<' | '>' | '[' | ']':
