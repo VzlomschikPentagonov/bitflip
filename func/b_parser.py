@@ -71,6 +71,8 @@ def remove_brackets(code: str,
         match char:
             case '{':
                 br_sum += 1
+                if br_sum != nest_lvl:
+                    new_code += char
                 continue
             case '}':
                 br_sum -= 1
