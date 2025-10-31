@@ -22,5 +22,8 @@ def print_tape(tape: list[int],
                chunk_size: int):
     tape_str_arr: list[str] = [chr(OFF + cell) for cell in tape]
     tape_str: str = "".join(tape_str_arr)
+    print("  " + "".join([chr(48 + digit) for digit in range(chunk_size)]))
+    chunk_index: int = 0
     for chunk in range(start, end, chunk_size):
-        print(tape_str[chunk: chunk + chunk_size])
+        print(chunk_index & 15, tape_str[chunk: chunk + chunk_size])
+        chunk_index += 1
