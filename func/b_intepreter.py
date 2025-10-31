@@ -40,7 +40,7 @@ def get_output(b_input: tuple[int, str],
     open_br, closed_br = get_addresses(program_str)
     open_br_keys: list[int] = list(open_br.keys())
     closed_br_keys: list[int] = list(closed_br.keys())
-    print(open_br, closed_br)
+    # print(open_br, closed_br)
     while program_str[pointer_p] != HALT:
         # print_data(program_str, program_str_len, pointer_p,
         #            pointer_t, tape[pointer_t], steps, len(tape) >> 1)
@@ -67,5 +67,5 @@ def get_output(b_input: tuple[int, str],
         steps += 1
     print_data(program_str, program_str_len, pointer_p,
                pointer_t, tape[pointer_t], steps, len(tape) >> 1)
-    print_tape(tape)
+    print_tape(tape, 128, 191, 7)
     return None

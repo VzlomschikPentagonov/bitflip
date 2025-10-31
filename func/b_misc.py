@@ -16,6 +16,11 @@ def print_data(program_str: str,
           f"{chr(OFF + cell)}, {pos_t - tape_lh}, {pos_p}, {steps}",
           sep = '')
 
-def print_tape(tape: list[int]):
-    tape_str: list[str] = [chr(OFF + cell) for cell in tape]
-    print("".join(tape_str))
+def print_tape(tape: list[int],
+               start: int,
+               end: int,
+               chunk_size: int):
+    tape_str_arr: list[str] = [chr(OFF + cell) for cell in tape]
+    tape_str: str = "".join(tape_str_arr)
+    for chunk in range(start, end, chunk_size):
+        print(tape_str[chunk: chunk + chunk_size])
