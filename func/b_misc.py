@@ -13,7 +13,8 @@ def print_data(program_str: str,
                tape_lh: int) -> None:
     print('\n', program_str, '\n',
           display_pointer_p(length, pos_p), '\n',
-          f'{chr(OFF + cell)}, {pos_t - tape_lh}, {pos_p}, {steps}', sep='')
+          f"{chr(OFF + cell)}, {pos_t - tape_lh}, {pos_p}, {steps}",
+          sep = '')
 
 def print_tape(tape: list[int]):
     tape_str: list[str] = [chr(OFF + cell) for cell in tape]
