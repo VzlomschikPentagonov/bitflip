@@ -1,6 +1,16 @@
 from bitflip.func.b_parser import compile_program
 from bitflip.func.b_misc import *
 
+def move_address(program_str: str,
+                 addresses: dict[int, int],
+                 char: str) -> dict[int, int]:
+    keys: list[int] = list(addresses.keys())
+    addresses_new: dict[int, int] = addresses
+    for address in keys:
+        while program_str[addresses_new[address]] == char:
+            addresses_new[address] += 1
+    return addresses_new
+
 def get_addresses(program_str: str) -> tuple[dict[int, int],
                                              dict[int, int]]:
     open_br: dict[int, int] = {}
@@ -18,6 +28,8 @@ def get_addresses(program_str: str) -> tuple[dict[int, int],
                 i += 1
             open_br[char] = i
             closed_br[i + PREV] = char + NEXT
+    move_address(program_str, open_br, ']')
+    move_address(program_str, closed_br, '[')
     return open_br, closed_br
 
 def goto(address_list: dict[int: int],
