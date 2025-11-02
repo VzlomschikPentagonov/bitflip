@@ -1,5 +1,8 @@
 from bitflip.func.b_constants import *
 
+def display_cell(cell: int) -> str:
+    return chr(OFF + cell * ON)
+
 def display_pointer_p(length: int,
                       pos: int) -> str:
     return ' ' * pos + '^' + ' ' * (length - pos - 1)
@@ -13,14 +16,14 @@ def print_data(program_str: str,
                tape_lh: int) -> None:
     print('\n', program_str, '\n',
           display_pointer_p(length, pos_p), '\n',
-          f"{chr(OFF + cell)}, {pos_t - tape_lh}, {pos_p}, {steps}",
+          f"{display_cell(cell)}, {pos_t - tape_lh}, {pos_p}, {steps}",
           sep = '')
 
 def print_tape(tape: list[int],
                start: int,
                end: int,
                chunk_size: int):
-    tape_str_arr: list[str] = [chr(OFF + cell) for cell in tape]
+    tape_str_arr: list[str] = [display_cell(cell) for cell in tape]
     tape_str: str = "".join(tape_str_arr)
     print("  " + "".join([chr(48 + digit) for digit in range(chunk_size)]))
     chunk_index: int = 0

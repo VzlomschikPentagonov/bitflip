@@ -59,7 +59,7 @@ def get_output(b_input: tuple[int, str],
                 if tape[pointer_t] != 0:
                     pointer_p, flag = goto(closed_br,
                                            closed_br_keys, pointer_p)
-        # if steps > 228: # set breakpoint
+        # if steps > 345: # set breakpoint
         #     break
         if not flag:
             pointer_p += 1
