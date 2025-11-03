@@ -1,4 +1,4 @@
-from bitflip.verificator.v_const import *
+from bitflip.tools.func.v_const import *
 
 def change_inputs(defines: dict[str, str],
                   *inputs) -> None:
