@@ -2,6 +2,7 @@ from bitflip.func.b_parser import read_input_file, read_defines_file
 from bitflip.func.b_intepreter import get_output
 from bitflip.verificator.v_func import *
 from bitflip.func.b_misc import display_cell
+
 def main() -> None:
     b_input: tuple[int, str] = read_input_file()
     defines: dict[str: str] = read_defines_file()
