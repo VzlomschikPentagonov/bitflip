@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# Input / program files
+*.txt
+*.bflp
+*.hbflp
+
 # Distribution / packaging
 .Python
 build/
