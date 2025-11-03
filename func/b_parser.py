@@ -103,9 +103,9 @@ def read_defines_file() -> dict[str, str]:
             defines[define] = code
     return defines
 
-def compile_program(program_str: str) -> str:
+def compile_program(program_str: str,
+                    defines: dict[str: str]) -> str:
     new_str: str = ""
-    defines: dict[str, str] = read_defines_file()
     max_nest_lvl: int = count_brackets(program_str)
     for nest_lvl in range(max_nest_lvl, 0, -1):
         program_str = remove_brackets(program_str, defines, nest_lvl)
