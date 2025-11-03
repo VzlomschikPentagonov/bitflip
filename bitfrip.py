@@ -1,4 +1,4 @@
-from func.b_parser import read_input_file
+from func.b_parser import read_input_file, read_defines_file
 from func.b_intepreter import get_output
 
 def main() -> None:
