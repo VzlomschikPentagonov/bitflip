@@ -11,7 +11,7 @@ def main() -> None:
     for input_a in range(16):
         for input_b in range(16):
             change_inputs(defines, input_a, input_b)
-            get_output(b_input, tape, defines)
+            get_output(b_input, tape, defines, verify = True)
             status = verify(tape, input_a, input_b)
             check_sum: int = calculate_check_sum(tape)
             print(display_cell(check_sum), end = "")

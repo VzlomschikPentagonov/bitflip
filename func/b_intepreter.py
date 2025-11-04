@@ -41,22 +41,25 @@ def goto(address_list: dict[int: int],
 
 def get_output(b_input: tuple[int, str],
                tape: list[int],
-               defines: dict[str: str]) -> None:
+               defines: dict[str: str],
+               track_runtime: bool = False,
+               verify: bool = False) -> None | int:
     num_states: int = b_input[NUM_STATES]
     program_str: str = compile_program(b_input[PROGRAM_STR], defines) + HALT
     program_str_len: int = len(program_str)
     pointer_t: int = len(tape) >> 1
     pointer_p: int = 0
     flag: bool = False
-    steps: int = 0
+    runtime: int = 0
     open_br, closed_br = get_addresses(program_str)
     open_br_keys: list[int] = list(open_br.keys())
     closed_br_keys: list[int] = list(closed_br.keys())
     # print(open_br, closed_br)
-    # print(program_str)
+    if not verify:
+        print(program_str)
     while program_str[pointer_p] != HALT:
         # print_data(program_str, program_str_len, pointer_p,
-        #            pointer_t, tape[pointer_t], steps, len(tape) >> 1)
+        #            pointer_t, tape[pointer_t], runtime, len(tape) >> 1)
         match program_str[pointer_p]:
             case '!':
                 tape[pointer_t] += 1
@@ -72,13 +75,16 @@ def get_output(b_input: tuple[int, str],
                 if tape[pointer_t] != 0:
                     pointer_p, flag = goto(closed_br,
                                            closed_br_keys, pointer_p)
-        # if steps == 200: # set breakpoint
+        # if runtime == 200: # set breakpoint
         #     break
         if not flag:
             pointer_p += 1
         flag = False
-        steps += 1
-    # print_data(program_str_len, pointer_p, pointer_t,
-    #            tape[pointer_t], steps, len(tape) >> 1)
-    # print_tape(tape, 128, 191, 7)
+        runtime += 1
+    if not verify:
+        print_data(program_str_len, pointer_p, pointer_t,
+                   tape[pointer_t], runtime, len(tape) >> 1)
+        print_tape(tape, 128, 191, 7)
+    if track_runtime:
+        return runtime
     return None

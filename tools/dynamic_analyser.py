@@ -12,7 +12,7 @@ def main() -> None:
         for input_b in range(16):
             change_inputs(defines, input_a, input_b)
             runtime_result.append(get_output(b_input, tape,
-                                             defines, True))
+                                             defines, track_runtime = True))
             tape: list[int] = [0] * 0x100
     get_runtime_data(runtime_result)
     return None
