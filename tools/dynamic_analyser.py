@@ -1,11 +1,11 @@
-from bitflip.func.b_parser import read_input_file, read_defines_file
+from bitflip.func.b_parser import read_input_file, read_include_file
 from bitflip.func.b_intepreter import get_output
 from bitflip.tools.func.v_func import change_inputs
 from bitflip.tools.func.da_func import *
 
 def main() -> None:
     b_input: tuple[int, str] = read_input_file()
-    defines: dict[str: str] = read_defines_file()
+    defines: dict[str: str] = read_include_file()
     tape: list[int] = [0] * 0x100
     runtime_result: list[int] = []
     for input_a in range(16):

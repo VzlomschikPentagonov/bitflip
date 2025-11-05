@@ -41,11 +41,11 @@ def goto(address_list: dict[int: int],
 
 def get_output(b_input: tuple[int, str],
                tape: list[int],
-               defines: dict[str: str],
+               sub_strs: dict[str: str],
                track_runtime: bool = False,
                verify: bool = False) -> None | int:
     num_states: int = b_input[NUM_STATES]
-    program_str: str = compile_program(b_input[PROGRAM_STR], defines) + HALT
+    program_str: str = compile_program(b_input[PROGRAM_STR], sub_strs) + HALT
     program_str_len: int = len(program_str)
     pointer_t: int = len(tape) >> 1
     pointer_p: int = 0

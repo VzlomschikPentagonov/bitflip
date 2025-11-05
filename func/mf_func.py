@@ -10,7 +10,7 @@ def read_file(file: TextIO) -> list[str]:
 
 def make_file(name: str) -> None:
     input_file: TextIO = open("input.txt")
-    defines_file: TextIO = open("defines.txt")
+    defines_file: TextIO = open("include.txt")
     new_file: TextIO = open(f"./code/{name}.bflp", "w+t")
     input_file_data: list[str] = input_file.readlines()
     if len(defines_file.readlines()) != 0:
@@ -21,7 +21,7 @@ def make_file(name: str) -> None:
 
 def load_file(name: str) -> None:
     input_file: TextIO = open("input.txt", "w+t")
-    defines_file: TextIO = open("defines.txt", "w+t")
+    defines_file: TextIO = open("include.txt", "w+t")
     code_file: TextIO = open(f"./code/{name}.bflp")
     header_file_data: list[str] = ["", ""]
     if f"{name}.hbflp" in listdir("./code/"):
