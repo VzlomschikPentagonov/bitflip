@@ -3,9 +3,7 @@ from re import match
 from bitflip.func.b_constants import *
 
 def get_code(input_file_data: list[str]) -> str:
-    program_str: str = ""
-    for line in input_file_data[STRIP_1ST_LINE:]:
-        program_str += line
+    program_str: str = "".join(input_file_data[STRIP_1ST_LINE:])
     return program_str
 
 def read_input_file() -> tuple[int, str]:
@@ -32,33 +30,27 @@ def count_brackets(line: str) -> int:
     return -1
 
 def parse_define_line(line: str) -> tuple[str, str]:
-    define: str = ""
-    code: str = ""
-    char: int = 0
-    while line[char] != ':':
-        define += line[char]
-        char += 1
-    for c_char in range(char + 2, len(line)):
-        code += line[c_char]
-    if code[-1] == '\n':
-        code = code[:-1]
-    return define, code
+    split_line: list[str] = line.split(':')
+    key: str = split_line[KEY]
+    value: str = split_line[VALUE]
+    value_new: str = "".join(value.splitlines()).lstrip()
+    return key, value_new
 
 def parse_bracket_str(string: str,
                       defines: dict[str, str]) -> str:
-    code: str = ""
+    value: str = ""
     repeat: str = ""
     if match(RM_REPSTR, string):
         for char in string:
             if char in CHAR_SET:
-                code += char
+                value += char
             if char.isdigit():
                 repeat += char
-        return code * int(repeat)
+        return value * int(repeat)
     elif match(RM_DEFINE, string):
-        for define in defines.keys():
-            if string == define:
-                return defines[define]
+        for key in defines.keys():
+            if string == key:
+                return defines[key]
         return ""
 
 def remove_brackets(code: str,
