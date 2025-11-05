@@ -53,30 +53,30 @@ def parse_bracket_str(string: str,
                 return sub_strs[key]
         return ""
 
-def remove_brackets(code: str,
+def remove_brackets(value: str,
                     sub_strs: dict[str, str],
                     nest_lvl: int) -> str:
     br_sum: int = 0
     string: str = ""
-    new_code: str = ""
-    for char in code:
+    value_new: str = ""
+    for char in value:
         match char:
             case '{':
                 br_sum += 1
                 if br_sum != nest_lvl:
-                    new_code += char
+                    value_new += char
                 continue
             case '}':
                 br_sum -= 1
                 if br_sum == nest_lvl - 1:
-                    new_code += parse_bracket_str(string, sub_strs)
+                    value_new += parse_bracket_str(string, sub_strs)
                     string = ""
                     continue
         if br_sum == nest_lvl:
             string += char
         else:
-            new_code += char
-    return new_code
+            value_new += char
+    return value_new
 
 def read_include_file() -> dict[str, str]:
     input_file: TextIO = open("include.txt")
@@ -86,13 +86,13 @@ def read_include_file() -> dict[str, str]:
     sub_strs: dict[str, str] = {}
     for line in input_file_data:
         if match(RM_DEFFILE, line):
-            define, code = parse_substr_line(line)
-            sub_strs[define] = code
+            key, value = parse_substr_line(line)
+            sub_strs[key] = value
         elif match(RM_DEFFILE_BR, line):
-            define, code = parse_substr_line(line)
+            key, value = parse_substr_line(line)
             for nest_lvl in range(max_nest_lvl, 0, -1):
-                code = remove_brackets(code, sub_strs, nest_lvl)
-            sub_strs[define] = code
+                value = remove_brackets(value, sub_strs, nest_lvl)
+            sub_strs[key] = value
     return sub_strs
 
 def compile_program(program_str: str,
