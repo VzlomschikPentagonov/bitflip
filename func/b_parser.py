@@ -18,12 +18,14 @@ def get_code(input_file_data: list[str]) -> str:
     program_str: str = "".join(input_file_data[STRIP_1ST_LINE:])
     return program_str
 
-def read_input_file() -> tuple[int, str]:
+def read_input_file() -> tuple[int, str, int]:
     return_to_main_dir()
     input_file: TextIO = open("input.txt")
     input_file_data: list[str] = input_file.readlines()
-    return (int(input_file_data[NUM_STATES]),
-            get_code(input_file_data))
+    config_str: list[str] = input_file_data[0].split(',')
+    return (int(config_str[NUM_STATES]),
+            get_code(input_file_data),
+            int(config_str[TAPE_LEN]))
 
 def count_brackets(line: str) -> int:
     br_sum: int = 0
@@ -53,14 +55,14 @@ def parse_bracket_str(string: str,
                       sub_strs: dict[str, str]) -> str:
     value: str = ""
     repeat: str = ""
-    if match(RM_REPSTR, string):
+    if match(RE_REPSTR, string):
         for char in string:
             if char in CHAR_SET:
                 value += char
             if char.isdigit():
                 repeat += char
         return value * int(repeat)
-    elif match(RM_DEFINE, string):
+    elif match(RE_DEFINE, string):
         for key in sub_strs.keys():
             if string == key:
                 return sub_strs[key]
@@ -100,10 +102,10 @@ def read_include_file() -> dict[str, str]:
     sub_strs: dict[str, str] = {}
     for line in input_file_data:
         line_nc: str = line.partition('#')[SUBSTR]
-        if match(RM_DEFFILE, line):
+        if match(RE_DEFFILE, line):
             key, value = parse_substr_line(line_nc)
             sub_strs[key] = value
-        elif match(RM_DEFFILE_BR, line):
+        elif match(RE_DEFFILE_BR, line):
             key, value = parse_substr_line(line_nc)
             for nest_lvl in range(max_nest_lvl, 0, -1):
                 value = remove_brackets(value, sub_strs, nest_lvl)

@@ -1,7 +1,11 @@
+# various constants
 NUM_STATES: int = 0
 PROGRAM_STR: int = 1
+CONFIG_STR: int = 0
+TAPE_LEN: int = 1
 STRIP_1ST_LINE: int = 1
 SUBSTR: int = 0
+PROJNAME: int = 1
 NEXT: int = 1
 PREV: int = -1
 LOOP_END: int = -1
@@ -10,9 +14,13 @@ VALUE: int = 1
 OFF: int = 46
 ON: int = 18
 HALT: str = 'h'
+
+# regex strings
 CHAR_SET: str = r"!<>[]"
-RM_CHARSET: str = r"!<>\[\]"
-RM_REPSTR: str = r"^([%s]+,\s*\d+)$" % RM_CHARSET
-RM_DEFINE: str = r"^(\w+)$"
-RM_DEFFILE: str = r"^(\w+:\s*[%s]*)$" % RM_CHARSET
-RM_DEFFILE_BR: str = r"^(\w+:\s*[%s{}\s\w,]+)$" % RM_CHARSET
+RE_CHARSET: str = r"!<>\[\]"
+RE_REPSTR: str = r"^([%s]+,\s*\d+)$" % RE_CHARSET
+RE_DEFINE: str = r"^(\w+)$"
+RE_DEFFILE: str = r"^(\w+:\s*[%s]*)$" % RE_CHARSET
+RE_DEFFILE_BR: str = r"^(\w+:\s*[%s{}\s\w,]+)$" % RE_CHARSET
+RE_FILENAME: str = r"^[^\\/*\"<>?.]+$"
+RE_PROJNAME: str = r"^\.[^\\/*\"<>?.]+$"
