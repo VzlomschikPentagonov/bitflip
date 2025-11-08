@@ -1,12 +1,25 @@
 from typing import TextIO
-from re import match, split
+from re import match
 from bitflip.func.b_constants import *
+from os import getcwd, chdir
+
+def return_to_main_dir():
+    curr_dir: list[str] = getcwd().split('\\')
+    dir_level: int = 1
+    for dir_ in reversed(curr_dir):
+        match dir_:
+            case "bitflip":
+                chdir('.' * dir_level + '/')
+                break
+            case _:
+                dir_level += 1
 
 def get_code(input_file_data: list[str]) -> str:
     program_str: str = "".join(input_file_data[STRIP_1ST_LINE:])
     return program_str
 
 def read_input_file() -> tuple[int, str]:
+    return_to_main_dir()
     input_file: TextIO = open("input.txt")
     input_file_data: list[str] = input_file.readlines()
     return (int(input_file_data[NUM_STATES]),
@@ -79,6 +92,7 @@ def remove_brackets(value: str,
     return value_new
 
 def read_include_file() -> dict[str, str]:
+    return_to_main_dir()
     input_file: TextIO = open("include.txt")
     input_file_data: list[str] = input_file.readlines()
     ifd_str: str = "".join(input_file_data)
