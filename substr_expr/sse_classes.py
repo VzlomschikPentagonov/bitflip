@@ -1,5 +1,8 @@
-class Keys:
-    def __init__(self, keys: str | list[str] = "",
+class Key:
+    def __init__(self, key: str = "",
                  entries: int = -1) -> None:
-        self.keys: str | list[str] = keys
+        self.key: str = key
         self.entries: int = entries
+
+    def decrease_entries(self) -> None:
+        self.entries -= 1
