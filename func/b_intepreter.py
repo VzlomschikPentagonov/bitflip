@@ -47,7 +47,7 @@ def get_output(b_input: tuple[int, str, int],
                track_runtime: bool = False,
                verify: bool = False,
                observe_runtime: bool = False,
-               breakpoint: int = -1) -> None | int:
+               breakpoint_: int = -1) -> None | int:
     num_states: int = b_input[NUM_STATES]
     program_str: str = compile_program(b_input[PROGRAM_STR], sub_strs) + HALT
     program_str_len: int = len(program_str)
@@ -76,7 +76,7 @@ def get_output(b_input: tuple[int, str, int],
                 if tape[pointer_t] != 0:
                     pointer_p, flag = goto(closed_br,
                                            closed_br_keys, pointer_p)
-        if runtime == breakpoint:
+        if runtime == breakpoint_:
             break
         if observe_runtime:
             print_tape(tape, 128, 191, observe_runtime = True)

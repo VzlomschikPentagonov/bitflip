@@ -4,7 +4,7 @@ from bitflip.tools.func.v_func import change_inputs
 from bitflip.tools.func.da_func import *
 
 def main() -> None:
-    b_input: tuple[int, str] = read_input_file()
+    b_input: tuple[int, str, int] = read_input_file()
     defines: dict[str: str] = read_include_file()
     tape: list[int] = [0] * 0x100
     runtime_result: list[int] = []

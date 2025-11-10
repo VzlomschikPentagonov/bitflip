@@ -20,14 +20,17 @@ def print_data(length: int,
 def print_tape(tape: list[int],
                start: int,
                end: int,
-               chunk_size: int = end - start,
+               chunk_size: int = DEFAULT_CHUNK_SIZE,
                observe_runtime = False,
                pos_t: int = -1) -> None:
     tape_str_arr: list[str] = [display_cell(cell) for cell in tape]
     tape_str: str = "".join(tape_str_arr)
     if not observe_runtime:
-        print("  " + "".join([chr(48 + digit) for digit in range(chunk_size)]))
+        print("  " + "".join([chr(CHR_ZERO + digit)
+                              for digit in range(chunk_size)]))
     chunk_index: int = 0
+    if chunk_size == DEFAULT_CHUNK_SIZE:
+        chunk_size = end - start
     for chunk in range(start, end, chunk_size):
         if not observe_runtime:
             print(chunk_index & 15, end = ' ')

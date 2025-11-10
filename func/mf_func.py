@@ -44,16 +44,18 @@ def load_project(name: str,
     chdir(f"./code/{name}")
     config: BinaryIO = open("config", "r+b")
     queue: TextIO = open("queue.txt")
+    main: TextIO = open("main.bflp")
+    input_file_data: list[str] = main.readlines()
     num_states: int = int.from_bytes(config.read(SIZEOF_UINT64),
                                      byteorder = "little")
     tape_len: int = int.from_bytes(config.read(SIZEOF_UINT64),
                                    byteorder = "little")
     input_file.write(f"{num_states},{tape_len}\n"
-                     + get_code(code_file_data))
+                     + get_code(input_file_data))
     chdir("./include")
     for include in queue.readlines():
         pj_include_file: TextIO = open(f"{include.rstrip('\n')}.hbflp")
-        include_file.write(pj_include_file.readlines() + '\n')
+        include_file.write("".join(pj_include_file.readlines()) + '\n')
 
 def make_file(name: str) -> None:
     input_file: TextIO = open("input.txt")
