@@ -1,6 +1,7 @@
 from typing import TextIO
 from re import match
 from bitflip.func.b_constants import *
+from bitflip.func.b_misc import print_error
 from os import getcwd, chdir
 
 def return_to_main_dir():
@@ -39,10 +40,9 @@ def count_brackets(line: str) -> int:
             case '}':
                 br_sum -= 1
         if br_sum < 0:
-            return -1
+            print_error(f"Unmatched closed bracket found")
     if br_sum == 0:
         return max_nest_lvl
-    return -1
 
 def parse_substr_line(line: str) -> tuple[str, str]:
     split_line: list[str] = line.split(':')
@@ -66,7 +66,8 @@ def parse_bracket_str(string: str,
         for key in sub_strs.keys():
             if string == key:
                 return sub_strs[key]
-        return ""
+    else:
+        print_error(f"Invalid sub string ({string})")
 
 def remove_brackets(value: str,
                     sub_strs: dict[str, str],
