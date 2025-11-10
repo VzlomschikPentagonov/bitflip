@@ -45,7 +45,9 @@ def get_output(b_input: tuple[int, str, int],
                tape: list[int],
                sub_strs: dict[str: str],
                track_runtime: bool = False,
-               verify: bool = False) -> None | int:
+               verify: bool = False,
+               observe_runtime: bool = False,
+               breakpoint: int = -1) -> None | int:
     num_states: int = b_input[NUM_STATES]
     program_str: str = compile_program(b_input[PROGRAM_STR], sub_strs) + HALT
     program_str_len: int = len(program_str)
@@ -56,12 +58,9 @@ def get_output(b_input: tuple[int, str, int],
     open_br, closed_br = get_addresses(program_str)
     open_br_keys: list[int] = list(open_br.keys())
     closed_br_keys: list[int] = list(closed_br.keys())
-    # print(open_br, closed_br)
     if not verify:
         print(program_str)
     while program_str[pointer_p] != HALT:
-        # print_data(program_str, program_str_len, pointer_p,
-        #            pointer_t, tape[pointer_t], runtime, len(tape) >> 1)
         match program_str[pointer_p]:
             case '!':
                 tape[pointer_t] += 1
@@ -77,8 +76,10 @@ def get_output(b_input: tuple[int, str, int],
                 if tape[pointer_t] != 0:
                     pointer_p, flag = goto(closed_br,
                                            closed_br_keys, pointer_p)
-        # if runtime == 200: # set breakpoint
-        #     break
+        if runtime == breakpoint:
+            break
+        if observe_runtime:
+            print_tape(tape, 128, 191, observe_runtime)
         if not flag:
             pointer_p += 1
         flag = False
