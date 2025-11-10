@@ -1,1 +1,2 @@
-DUMMY_CONST: None
+def dummy_func() -> None:
+    return None
