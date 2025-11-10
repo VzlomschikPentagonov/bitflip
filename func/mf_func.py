@@ -15,26 +15,24 @@ def read_file(file: TextIO) -> list[str]:
 def make_project(name: str,
                  input_file: TextIO,
                  include_file: TextIO) -> None:
-    chdir("./code")
     name = name.split('.')[PROJNAME]
+    input_file_data: list[str] = input_file.readlines()
+    config_data: list[str] = input_file_data[CONFIG_LINE].split(',')
+    chdir("./code")
     mkdir(name)
     chdir(name)
-    main: TextIO = open("main.bflp", "w+t")
-    config: BinaryIO = open("config", "w+b")
-    input_file_data: list[str] = input_file.readlines()
-    main.write(get_code(input_file_data))
-    config_data: list[str] = input_file_data[CONFIG_LINE].split(',')
-    num_states: c_uint64 = c_uint64(int(config_data[NUM_STATES]))
-    tape_len: c_uint64 = c_uint64(int(config_data[TAPE_LEN]))
-    config_byte_str: bytes = b""
-    config_byte_str += bytes(num_states) + bytes(tape_len)
-    config.write(config_byte_str)
-    queue: TextIO = open("queue.txt", "w+t")
-    queue.write("include")
     mkdir("docs")
     mkdir("include")
+    main: TextIO = open("main.bflp", "w+t")
+    config: BinaryIO = open("config", "w+b")
+    queue: TextIO = open("queue.txt", "w+t")
     pj_include_file: TextIO = open("./include/include.hbflp", "w+t")
+    main.write(get_code(input_file_data))
     pj_include_file.write("".join(include_file.readlines()))
+    queue.write("include")
+    num_states: c_uint64 = c_uint64(int(config_data[NUM_STATES]))
+    tape_len: c_uint64 = c_uint64(int(config_data[TAPE_LEN]))
+    config.write(bytes(num_states) + bytes(tape_len))
 
 def load_project(name: str,
                  input_file: TextIO,
