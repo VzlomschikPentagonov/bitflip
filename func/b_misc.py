@@ -20,7 +20,7 @@ def print_data(length: int,
 def print_tape(tape: list[int],
                start: int,
                end: int,
-               chunk_size: int):
+               chunk_size: int) -> None:
     tape_str_arr: list[str] = [display_cell(cell) for cell in tape]
     tape_str: str = "".join(tape_str_arr)
     print("  " + "".join([chr(48 + digit) for digit in range(chunk_size)]))
@@ -28,3 +28,6 @@ def print_tape(tape: list[int],
     for chunk in range(start, end, chunk_size):
         print(chunk_index & 15, tape_str[chunk: chunk + chunk_size])
         chunk_index += 1
+
+def print_error(message: str) -> None:
+    raise Exception(f"[Error] {message}")
