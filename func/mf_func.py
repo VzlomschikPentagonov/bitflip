@@ -1,5 +1,6 @@
 from bitflip.func.b_parser import get_code
 from bitflip.func.b_constants import *
+from bitflip.func.b_misc import print_error
 from typing import TextIO, BinaryIO
 from os import listdir, mkdir, chdir
 from re import match
@@ -54,7 +55,7 @@ def make_file(name: str) -> None:
     elif match(RE_PROJNAME, name):
         make_project(name, input_file)
     else:
-        raise Exception("[Error] invalid filename")
+        print_error("Invalid filename")
 
 def load_file(name: str) -> None:
     input_file: TextIO = open("input.txt", "w+t")
@@ -71,4 +72,4 @@ def load_file(name: str) -> None:
     elif match(RE_PROJNAME, name):
         load_project(name, input_file)
     else:
-        raise Exception("[Error] invalid filename")
+        print_error("Invalid filename")
