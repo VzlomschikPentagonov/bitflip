@@ -39,7 +39,7 @@ def goto(address_list: dict[int: int],
             pos_p = address_list[address]
             return pos_p, True
 
-def get_output(b_input: tuple[int, str],
+def get_output(b_input: tuple[int, str, int],
                tape: list[int],
                sub_strs: dict[str: str],
                track_runtime: bool = False,

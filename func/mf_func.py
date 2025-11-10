@@ -28,6 +28,8 @@ def make_project(name: str,
     config_byte_str: bytes = b""
     config_byte_str += bytes(num_states) + bytes(tape_len)
     config.write(config_byte_str)
+    queue: TextIO = open("queue.txt", "w+t")
+    queue.write("include")
     for token in tokens:
         split_token: list[str] = token.split('.')
         mkdir(split_token[0])
