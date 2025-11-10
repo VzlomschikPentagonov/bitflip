@@ -1,7 +1,6 @@
 from typing import TextIO
 from re import match
 from bitflip.func.b_constants import *
-from bitflip.func.b_misc import print_error
 from os import getcwd, chdir
 
 def return_to_main_dir():
@@ -40,7 +39,7 @@ def count_brackets(line: str) -> int:
             case '}':
                 br_sum -= 1
         if br_sum < 0:
-            print_error(f"Unmatched closed bracket found")
+            return -1
     if br_sum == 0:
         return max_nest_lvl
 
@@ -65,8 +64,6 @@ def parse_bracket_str(string: str,
         for key in sub_strs.keys():
             if string == key:
                 return sub_strs[key]
-    else:
-        print_error(f"Invalid sub string ({string})")
 
 def remove_brackets(value: str,
                     sub_strs: dict[str, str],
@@ -101,7 +98,7 @@ def read_include_file() -> dict[str, str]:
     max_nest_lvl: int = count_brackets(ifd_str)
     sub_strs: dict[str, str] = {}
     for line in input_file_data:
-        line_nc: str = line.partition('#')[SUBSTR]
+        line_nc: str = line.partition('#')[SUBSTR].replace(' ', "")
         if match(RE_DEFFILE, line):
             key, value = parse_substr_line(line_nc)
             sub_strs[key] = value
