@@ -38,8 +38,22 @@ def make_project(name: str,
              + '.' + split_token[1], "w+t")
 
 def load_project(name: str,
-                 input_file: TextIO) -> None:
-    ...
+                 input_file: TextIO,
+                 include_file: TextIO) -> None:
+    name = name.split('.')[PROJNAME]
+    chdir(f"./code/{name}")
+    config: BinaryIO = open("config", "r+b")
+    queue: TextIO = open("queue.txt")
+    num_states: int = int.from_bytes(config.read(SIZEOF_UINT64),
+                                     byteorder = "little")
+    tape_len: int = int.from_bytes(config.read(SIZEOF_UINT64),
+                                   byteorder = "little")
+    input_file.write(f"{num_states},{tape_len}\n"
+                     + get_code(code_file_data))
+    chdir("./include")
+    for include in queue.readlines():
+        pj_include_file: TextIO = open(f"{include.rstrip('\n')}.hbflp")
+        include_file.write(pj_include_file.readlines() + '\n')
 
 def make_file(name: str) -> None:
     input_file: TextIO = open("input.txt")
@@ -70,6 +84,6 @@ def load_file(name: str) -> None:
         input_file.write("2\n" + get_code(code_file_data))
         include_file.write(get_code(header_file_data))
     elif match(RE_PROJNAME, name):
-        load_project(name, input_file)
+        load_project(name, input_file, include_file)
     else:
         print_error("Invalid filename")
