@@ -5,6 +5,7 @@ from re import match
 
 def parse_sse_arg(arg: str,
                   sub_strs: dict[str: str]) -> list[Key]:
+    key_list: list[Key] = []
     match arg[START]:
         case '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '-' | '^':
             ...
@@ -28,7 +29,10 @@ def parse_substr_expr(substr_expr: str,
     split_args: list[int] = split_expr[SUBSTR_ARGS].split(',')
     for arg in split_args:
         arg = param.replace(' ', "")
-        key_list = parse_sse_arg(arg, sub_strs)
+        if arg != "":
+            key_list = parse_sse_arg(arg, sub_strs)
+        else:
+            ...
     return num_args, [Key()]
 
 def check_substr_expr(substr_expr: str) -> int | tuple[int, list[Key]]:
