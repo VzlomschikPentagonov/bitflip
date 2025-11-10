@@ -1,7 +1,6 @@
 # various constants
 NUM_STATES: int = 0
 PROGRAM_STR: int = 1
-CONFIG_STR: int = 0
 TAPE_LEN: int = 1
 STRIP_1ST_LINE: int = 1
 SUBSTR: int = 0
