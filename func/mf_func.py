@@ -23,7 +23,7 @@ def make_project(name: str,
     tokens: list[str] = ["include.hbflp", "docs.txt"]
     input_file_data: list[str] = input_file.readlines()
     main.write(get_code(input_file_data))
-    config_data: list[str] = input_file_data[0].split(',')
+    config_data: list[str] = input_file_data[CONFIG_LINE].split(',')
     num_states: c_uint64 = c_uint64(int(config_data[NUM_STATES]))
     tape_len: c_uint64 = c_uint64(int(config_data[TAPE_LEN]))
     config_byte_str: bytes = b""
@@ -33,9 +33,9 @@ def make_project(name: str,
     queue.write("include")
     for token in tokens:
         split_token: list[str] = token.split('.')
-        mkdir(split_token[0])
-        open(f"./{split_token[0]}/{split_token[0]}"
-             + '.' + split_token[1], "w+t")
+        mkdir(split_token[NAME])
+        open(f"./{split_token[NAME]}/{split_token[NAME]}"
+             + '.' + split_token[FILE_EXT], "w+t")
 
 def load_project(name: str,
                  input_file: TextIO,
