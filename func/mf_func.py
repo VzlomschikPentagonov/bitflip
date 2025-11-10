@@ -13,14 +13,14 @@ def read_file(file: TextIO) -> list[str]:
     return file_data
 
 def make_project(name: str,
-                 input_file: TextIO) -> None:
+                 input_file: TextIO,
+                 include_file: TextIO) -> None:
     chdir("./code")
     name = name.split('.')[PROJNAME]
     mkdir(name)
     chdir(name)
     main: TextIO = open("main.bflp", "w+t")
     config: BinaryIO = open("config", "w+b")
-    tokens: list[str] = ["include.hbflp", "docs.txt"]
     input_file_data: list[str] = input_file.readlines()
     main.write(get_code(input_file_data))
     config_data: list[str] = input_file_data[CONFIG_LINE].split(',')
@@ -31,11 +31,10 @@ def make_project(name: str,
     config.write(config_byte_str)
     queue: TextIO = open("queue.txt", "w+t")
     queue.write("include")
-    for token in tokens:
-        split_token: list[str] = token.split('.')
-        mkdir(split_token[NAME])
-        open(f"./{split_token[NAME]}/{split_token[NAME]}"
-             + '.' + split_token[FILE_EXT], "w+t")
+    mkdir("docs")
+    mkdir("include")
+    pj_include_file: TextIO = open("./include/include.hbflp", "w+t")
+    pj_include_file.write("".join(include_file.readlines()))
 
 def load_project(name: str,
                  input_file: TextIO,
@@ -51,10 +50,9 @@ def load_project(name: str,
     tape_len: int = int.from_bytes(config.read(SIZEOF_UINT64),
                                    byteorder = "little")
     input_file.write(f"{num_states},{tape_len}\n"
-                     + get_code(input_file_data))
-    chdir("./include")
+                     + "".join(input_file_data))
     for include in queue.readlines():
-        pj_include_file: TextIO = open(f"{include.rstrip('\n')}.hbflp")
+        pj_include_file: TextIO = open(f"./include/{include.rstrip('\n')}.hbflp")
         include_file.write("".join(pj_include_file.readlines()) + '\n')
 
 def make_file(name: str) -> None:
@@ -69,7 +67,7 @@ def make_file(name: str) -> None:
             header_file.write(get_code(header_file_data))
         new_file.write(get_code(input_file_data))
     elif match(RE_PROJNAME, name):
-        make_project(name, input_file)
+        make_project(name, input_file, include_file)
     else:
         print_error("Invalid filename")
 
