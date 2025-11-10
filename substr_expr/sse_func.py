@@ -3,6 +3,26 @@ from bitflip.substr_expr.sse_classes import *
 from bitflip.func.b_misc import print_error
 from re import match
 
+def parse_digit_arg(arg: str,
+                    sub_strs: dict[str: str]) -> list[Key]:
+    key_list: list[Key] = []
+    return key_list
+
+def parse_startsw_arg(arg: str,
+                    sub_strs: dict[str: str]) -> list[Key]:
+    key_list: list[Key] = []
+    return key_list
+
+def parse_endsw_arg(arg: str,
+                    sub_strs: dict[str: str]) -> list[Key]:
+    key_list: list[Key] = []
+    return key_list
+
+def parse_keyword_arg(arg: str,
+                    sub_strs: dict[str: str]) -> list[Key]:
+    key_list: list[Key] = []
+    return key_list
+
 def parse_sse_arg(arg: str,
                   sub_strs: dict[str: str]) -> list[Key]:
     key_list: list[Key] = []
