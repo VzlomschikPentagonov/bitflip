@@ -3,16 +3,24 @@ from bitflip.substr_expr.sse_classes import *
 from bitflip.func.b_misc import print_error
 from re import match
 
+def parse_sse_arg(arg: str,
+                  sub_strs: dict[str: str]) -> list[Key]:
+    return [Key()]
+
 def parse_substr_expr(substr_expr: str,
                       sub_strs: dict[str: str]) -> tuple[int, list[Key]]:
     split_expr: tuple = substr_expr.partition('|')
+    key_list: list[Key] = []
     if split_expr[2] == "":
         num_args: int = 1
     elif(match(RE_SUBSTR_D1, split_expr[2])
        and match(RE_SUBSTR_D2, split_expr[2])):
         num_args: int = int(split_expr[2])
-    ...
-    return num_args, Key()
+    split_args: list[int] = split_expr[0].split(',')
+    for arg in split_args:
+        arg = param.replace(' ', "")
+        key_list = parse_sse_arg(arg, sub_strs)
+    return num_args, [Key()]
 
 def check_substr_expr(substr_expr: str) -> int | tuple[int, list[Key]]:
     if substr_expr == "":
