@@ -25,6 +25,8 @@ def get_addresses(program_str: str) -> tuple[dict[int, int],
                     case ']':
                         bracket_sum -= 1
                 i += 1
+            if bracket_sum != LOOP_END:
+                print_error(f"Unmatched bracket at position {char}")
             open_br[char] = i
             closed_br[i + PREV] = char + NEXT
     move_address(program_str, open_br, ']')
