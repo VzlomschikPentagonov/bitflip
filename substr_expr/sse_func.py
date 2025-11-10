@@ -8,14 +8,14 @@ def parse_sse_arg(arg: str,
     key_list: list[Key] = []
     match arg[START]:
         case '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '-' | '^':
-            ...
+            key_list = parse_digit_arg(arg, sub_strs)
         case '/':
-            ...
+            key_list = parse_startsw_arg(arg, sub_strs)
         case '\\':
-            ...
+            key_list = parse_endsw_arg(arg, sub_strs)
         case '0' | _:
-            ...
-    return [Key()]
+            key_list = parse_keyword_arg(arg, sub_strs)
+    return key_list
 
 def parse_substr_expr(substr_expr: str,
                       sub_strs: dict[str: str]) -> tuple[int, list[Key]]:
@@ -32,7 +32,7 @@ def parse_substr_expr(substr_expr: str,
         if arg != "":
             key_list = parse_sse_arg(arg, sub_strs)
         else:
-            ...
+            parse_digit_arg(arg, sub_strs)
     return num_args, [Key()]
 
 def check_substr_expr(substr_expr: str) -> int | tuple[int, list[Key]]:
