@@ -48,8 +48,7 @@ def parse_substr_line(line: str) -> tuple[str, str]:
     split_line: list[str] = line.split(':')
     key: str = split_line[KEY]
     value: str = split_line[VALUE]
-    value_new: str = "".join(value.splitlines()).lstrip()
-    return key, value_new
+    return key, value.rstrip('\n')
 
 def parse_bracket_str(string: str,
                       sub_strs: dict[str, str]) -> str:
