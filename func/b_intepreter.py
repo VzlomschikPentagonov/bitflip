@@ -79,7 +79,7 @@ def get_output(b_input: tuple[int, str, int],
         if runtime == breakpoint:
             break
         if observe_runtime:
-            print_tape(tape, 128, 191, observe_runtime)
+            print_tape(tape, 128, 191, observe_runtime = True)
         if not flag:
             pointer_p += 1
         flag = False
@@ -87,7 +87,7 @@ def get_output(b_input: tuple[int, str, int],
     if not verify:
         print_data(program_str_len, pointer_p, pointer_t,
                    tape[pointer_t], runtime, len(tape) >> 1)
-        print_tape(tape, 128, 191, 7)
+        print_tape(tape, 128, 191, chunk_size = 7)
     if track_runtime:
         return runtime
     return None
