@@ -12,6 +12,7 @@ LOOP_END: int = -1
 KEY: int = 0
 VALUE: int = 1
 SIZEOF_UINT64: int = 8
+CONFIG_LINE: int = 0
 NAME: int = 0
 FILE_EXT: int = 1
 OFF: int = 46
