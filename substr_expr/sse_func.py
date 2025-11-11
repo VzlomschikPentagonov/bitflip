@@ -38,9 +38,11 @@ def parse_digit_arg(arg: str,
             else:
                 range_ = [int(split_arg[START])]
                 if '-' in arg:
-                    range_ = [*range(int(split_arg[START]), int(split_arg[END]) + 1)]
+                    range_ = [*range(int(split_arg[START]),
+                                     int(split_arg[END]) + 1)]
                     if '+' in arg:
-                        range_ = [*range(int(split_arg[START]), int(split_arg[END]) + 1,
+                        range_ = [*range(int(split_arg[START]),
+                                         int(split_arg[END]) + 1,
                                          int(split_arg[STEP]))]
     pick_keys(key_list, sub_strs, lengths = range_)
     return key_list
