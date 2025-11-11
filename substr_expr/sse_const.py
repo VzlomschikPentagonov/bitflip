@@ -2,6 +2,11 @@
 SUBSTR_ARGS: int = 0
 NUM_ARGS: int = 2
 START: int = 0
+LENGTH_DEFAULT: int = 1
+ENTRIES_DEFAULT: int = -1
+ENTRIES_NUM: int = -1
+STR_DEFAULT: int = "%"
+PICK_LENGTH_N: int = 0
 
 # regex strings
 RE_SUBSTR_D1: str = r"^[1-9].*\d*$"
@@ -11,3 +16,4 @@ RE_DIGIT_ARG: str = r"^(\d*(-\d+(\+\d+)?)?\^?\d*)$"
 RE_STARTW_ARG: str = r"^(/\w+)$"
 RE_ENDSW_ARG: str = r"^([\]\w+)$"
 RE_KEYWORD_ARG: str = r"^(\w+)$"
+RE_SPLIT_DIGIT_ARG: str = r"[\-+\^]"
