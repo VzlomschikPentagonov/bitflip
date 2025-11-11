@@ -1,23 +1,36 @@
 from bitflip.substr_expr.sse_const import *
 from bitflip.substr_expr.sse_classes import *
 from bitflip.func.b_misc import print_error
-from re import match
+from re import match, strip
+
+def pick_keys(key_list: list[Key],
+              sub_strs: dict[str: str],
+              length: int = 1,
+              starts_with: str = "%",
+              ends_with: str = "%",
+              keyword: str = "%",
+              entries_: int = -1) -> None:
+    for key in sub_strs.keys():
+        if len(key) == length:
+            key_list.append(Key(key, entries = entries_))
+        elif match(f"^{starts_with}", key):
+            key_list.append(Key(key, entries = entries_))
+        elif match(f"{ends_with}$", key):
+            key_list.append(Key(key, entries = entries_))
+        elif key = keyword:
+            key_list.append(Key(key, entries = entries_))
+        
 
 def parse_digit_arg(arg: str,
                     sub_strs: dict[str: str]) -> list[Key]:
     key_list: list[Key] = []
     if arg == "":
-        for key in sub_strs.keys:
+        pick_keys(key_list, sub_strs)
+    if match(RE_DIGIT_ARG, arg):
+        split_arg: list[str] = split(RE_SPLIT_DIGIT_ARG)
+        if split_arg[PICK_LENGTH_N] == "":
             if len(key) == 1:
                 key_list.append(Key(key, entries = -1))
-    if match(RE_DIGIT_ARG, arg):
-        match arg[START]:
-            case '-':
-                ...
-            case '^':
-                ...
-            case _:
-                ...
     return key_list
 
 def parse_startsw_arg(arg: str,
