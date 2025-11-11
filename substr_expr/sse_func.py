@@ -44,22 +44,46 @@ def parse_digit_arg(arg: str,
                         range_ = [*range(int(split_arg[START]),
                                          int(split_arg[END]) + 1,
                                          int(split_arg[STEP]))]
-    pick_keys(key_list, sub_strs, lengths = range_)
+    pick_keys(key_list, sub_strs, lengths = range_, entries_ = entries)
     return key_list
 
 def parse_startsw_arg(arg: str,
                       sub_strs: dict[str: str]) -> list[Key]:
     key_list: list[Key] = []
+    entries: int = ENTRIES_DEFAULT
+    split_arg: list[str] = arg.split('^')
+    if arg[START] == '0':
+        arg = arg.replace('0', "", 1)
+    if split_arg[ENTRIES_NUM] != "":
+        entries = int(arg[ENTRIES_NUM])
+    pick_keys(key_list, sub_strs, starts_with = arg.lstrip('/'),
+              entries_ = entries)
     return key_list
 
 def parse_endsw_arg(arg: str,
                     sub_strs: dict[str: str]) -> list[Key]:
     key_list: list[Key] = []
+    entries: int = ENTRIES_DEFAULT
+    split_arg: list[str] = arg.split('^')
+    if arg[START] == '0':
+        arg = arg.replace('0', "", 1)
+    if split_arg[ENTRIES_NUM] != "":
+        entries = int(arg[ENTRIES_NUM])
+    pick_keys(key_list, sub_strs, starts_with = arg.lstrip('\\'),
+              entries_ = entries)
     return key_list
 
 def parse_keyword_arg(arg: str,
                       sub_strs: dict[str: str]) -> list[Key]:
     key_list: list[Key] = []
+    entries: int = ENTRIES_DEFAULT
+    split_arg: list[str] = arg.split('^')
+    if arg[START] == '0':
+        arg = arg.replace('0', "", 1)
+    if split_arg[ENTRIES_NUM] != "":
+        entries = int(arg[ENTRIES_NUM])
+    pick_keys(key_list, sub_strs, keyword = arg,
+              entries_ = entries)
     return key_list
 
 def parse_sse_arg(arg: str,
