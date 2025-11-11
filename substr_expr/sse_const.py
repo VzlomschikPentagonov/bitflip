@@ -7,7 +7,7 @@ STEP: int = 2
 LENGTH_DEFAULT: int = 1
 ENTRIES_DEFAULT: int = -1
 ENTRIES_NUM: int = -1
-STR_DEFAULT: int = "%"
+STR_DEFAULT: str = "%"
 PICK_LENGTH_N: int = 0
 
 # regex strings

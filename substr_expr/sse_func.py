@@ -1,11 +1,11 @@
 from bitflip.substr_expr.sse_const import *
 from bitflip.substr_expr.sse_classes import *
 from bitflip.func.b_misc import print_error
-from re import match, strip
+from re import match, split
 
 def pick_keys(key_list: list[Key],
               sub_strs: dict[str: str],
-              lengths: list = [LENGTH_DEFAULT],
+              lengths: list[int],
               starts_with: str = STR_DEFAULT,
               ends_with: str = STR_DEFAULT,
               keyword: str = STR_DEFAULT,
@@ -17,7 +17,7 @@ def pick_keys(key_list: list[Key],
             key_list.append(Key(key, entries = entries_))
         elif match(f".*{ends_with}$", key):
             key_list.append(Key(key, entries = entries_))
-        elif key = keyword:
+        elif key == keyword:
             key_list.append(Key(key, entries = entries_))
 
 def parse_digit_arg(arg: str,
@@ -26,9 +26,9 @@ def parse_digit_arg(arg: str,
     range_: list[int] = []
     entries: int = ENTRIES_DEFAULT
     if arg == "":
-        pick_keys(key_list, sub_strs)
+        pick_keys(key_list, sub_strs, [1])
     if match(RE_DIGIT_ARG, arg):
-        split_arg: list[str] = split(RE_SPLIT_DIGIT_ARG)
+        split_arg: list[str] = split(RE_SPLIT_DIGIT_ARG, arg)
         if '^' in arg:
             if split_arg[ENTRIES_NUM] != "":
                 entries = int(arg[ENTRIES_NUM])
@@ -56,8 +56,8 @@ def parse_startsw_arg(arg: str,
         arg = arg.replace('0', "", 1)
     if split_arg[ENTRIES_NUM] != "":
         entries = int(arg[ENTRIES_NUM])
-    pick_keys(key_list, sub_strs, starts_with = arg.lstrip('/'),
-              entries_ = entries)
+    pick_keys(key_list, sub_strs, [], starts_with = arg.lstrip('/'),
+              entries_ = entries, )
     return key_list
 
 def parse_endsw_arg(arg: str,
@@ -69,7 +69,7 @@ def parse_endsw_arg(arg: str,
         arg = arg.replace('0', "", 1)
     if split_arg[ENTRIES_NUM] != "":
         entries = int(arg[ENTRIES_NUM])
-    pick_keys(key_list, sub_strs, starts_with = arg.lstrip('\\'),
+    pick_keys(key_list, sub_strs, [], starts_with = arg.lstrip('\\'),
               entries_ = entries)
     return key_list
 
@@ -82,22 +82,20 @@ def parse_keyword_arg(arg: str,
         arg = arg.replace('0', "", 1)
     if split_arg[ENTRIES_NUM] != "":
         entries = int(arg[ENTRIES_NUM])
-    pick_keys(key_list, sub_strs, keyword = arg,
-              entries_ = entries)
+    pick_keys(key_list, sub_strs, [], keyword = arg, entries_ = entries)
     return key_list
 
 def parse_sse_arg(arg: str,
                   sub_strs: dict[str: str]) -> list[Key]:
-    key_list: list[Key] = []
     match arg[START]:
         case '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '-' | '^':
-            key_list = parse_digit_arg(arg, sub_strs)
+            key_list: list[Key]  = parse_digit_arg(arg, sub_strs)
         case '/':
-            key_list = parse_startsw_arg(arg, sub_strs)
+            key_list: list[Key]  = parse_startsw_arg(arg, sub_strs)
         case '\\':
-            key_list = parse_endsw_arg(arg, sub_strs)
+            key_list: list[Key]  = parse_endsw_arg(arg, sub_strs)
         case '0' | _:
-            key_list = parse_keyword_arg(arg, sub_strs)
+            key_list: list[Key]  = parse_keyword_arg(arg, sub_strs)
     return key_list
 
 def parse_substr_expr(substr_expr: str,
@@ -112,18 +110,19 @@ def parse_substr_expr(substr_expr: str,
     for arg in split_args:
         arg = arg.replace(' ', "")
         if arg != "":
-            key_list = parse_sse_arg(arg, sub_strs)
+            key_list: list[Key] = parse_sse_arg(arg, sub_strs)
         else:
             parse_digit_arg(arg, sub_strs)
-    return num_args, [Key()]
+    return num_args, key_list
 
-def check_substr_expr(substr_expr: str) -> int | tuple[int, list[Key]]:
+def check_substr_expr(substr_expr: str,
+                      sub_strs: dict[str: str]) -> int | tuple[int, list[Key]]:
     if substr_expr == "":
         return 1
     elif(match(RE_SUBSTR_D1, substr_expr)
          and match(RE_SUBSTR_D2, substr_expr)):
         return int(substr_expr)
     elif match(RE_SUBSTR, substr_expr):
-        return parse_substr_expr(substr_expr)
+        return parse_substr_expr(substr_expr, sub_strs)
     else:
         print_error("Invalid sub string expression")
