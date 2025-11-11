@@ -10,13 +10,14 @@ def parse_digit_arg(arg: str,
         for key in sub_strs.keys:
             if len(key) == 1:
                 key_list.append(Key(key, entries = -1))
-    match arg[START]:
-        case '-':
-            ...
-        case '^':
-            ...
-        case _:
-            ...
+    if match(RE_DIGIT_ARG, arg):
+        match arg[START]:
+            case '-':
+                ...
+            case '^':
+                ...
+            case _:
+                ...
     return key_list
 
 def parse_startsw_arg(arg: str,
