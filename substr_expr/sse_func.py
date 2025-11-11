@@ -5,13 +5,13 @@ from re import match, strip
 
 def pick_keys(key_list: list[Key],
               sub_strs: dict[str: str],
-              length: int = LENGTH_DEFAULT,
-              starts_with: str = "%",
-              ends_with: str = "%",
-              keyword: str = "%",
-              entries_: int = -1) -> None:
+              lengths: list = [LENGTH_DEFAULT],
+              starts_with: str = STR_DEFAULT,
+              ends_with: str = STR_DEFAULT,
+              keyword: str = STR_DEFAULT,
+              entries_: int = ENTRIES_DEFAULT) -> None:
     for key in sub_strs.keys():
-        if len(key) == length:
+        if len(key) in lengths:
             key_list.append(Key(key, entries = entries_))
         elif match(f"^{starts_with}", key):
             key_list.append(Key(key, entries = entries_))
@@ -19,18 +19,30 @@ def pick_keys(key_list: list[Key],
             key_list.append(Key(key, entries = entries_))
         elif key = keyword:
             key_list.append(Key(key, entries = entries_))
-        
 
 def parse_digit_arg(arg: str,
                     sub_strs: dict[str: str]) -> list[Key]:
     key_list: list[Key] = []
+    range_: list[int] = []
+    entries: int = ENTRIES_DEFAULT
     if arg == "":
         pick_keys(key_list, sub_strs)
     if match(RE_DIGIT_ARG, arg):
         split_arg: list[str] = split(RE_SPLIT_DIGIT_ARG)
-        if split_arg[PICK_LENGTH_N] == "":
-            if len(key) == 1:
-                key_list.append(Key(key, entries = -1))
+        if '^' in arg:
+            if split_arg[ENTRIES_NUM] != "":
+                entries = int(arg[ENTRIES_NUM])
+        else:
+            if split_arg[START] == "":
+                range_ = [1]
+            else:
+                range_ = [int(split_arg[START])]
+                if '-' in arg:
+                    range_ = [*range(int(split_arg[START]), int(split_arg[END]) + 1)]
+                    if '+' in arg:
+                        range_ = [*range(int(split_arg[START]), int(split_arg[END]) + 1,
+                                         int(split_arg[STEP]))]
+    pick_keys(key_list, sub_strs, lengths = range_)
     return key_list
 
 def parse_startsw_arg(arg: str,
