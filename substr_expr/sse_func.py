@@ -5,7 +5,7 @@ from re import match, strip
 
 def pick_keys(key_list: list[Key],
               sub_strs: dict[str: str],
-              length: int = 1,
+              length: int = LENGTH_DEFAULT,
               starts_with: str = "%",
               ends_with: str = "%",
               keyword: str = "%",
