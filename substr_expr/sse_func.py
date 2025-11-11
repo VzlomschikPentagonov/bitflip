@@ -6,6 +6,17 @@ from re import match
 def parse_digit_arg(arg: str,
                     sub_strs: dict[str: str]) -> list[Key]:
     key_list: list[Key] = []
+    if arg == "":
+        for key in sub_strs.keys:
+            if len(key) == 1:
+                key_list.append(Key(key, entries = -1))
+    match arg[START]:
+        case '-':
+            ...
+        case '^':
+            ...
+        case _:
+            ...
     return key_list
 
 def parse_startsw_arg(arg: str,
