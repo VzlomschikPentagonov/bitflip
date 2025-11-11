@@ -15,7 +15,7 @@ def pick_keys(key_list: list[Key],
             key_list.append(Key(key, entries = entries_))
         elif match(f"^{starts_with}", key):
             key_list.append(Key(key, entries = entries_))
-        elif match(f"{ends_with}$", key):
+        elif match(f".*{ends_with}$", key):
             key_list.append(Key(key, entries = entries_))
         elif key = keyword:
             key_list.append(Key(key, entries = entries_))
