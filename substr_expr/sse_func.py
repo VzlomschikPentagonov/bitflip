@@ -27,6 +27,7 @@ def parse_digit_arg(arg: str,
     entries: int = ENTRIES_DEFAULT
     if arg == "":
         pick_keys(key_list, sub_strs, [1])
+        return key_list
     if match(RE_DIGIT_ARG, arg):
         split_arg: list[str] = split(RE_SPLIT_DIGIT_ARG, arg)
         if '^' in arg:
@@ -34,7 +35,10 @@ def parse_digit_arg(arg: str,
                 entries = int(arg[ENTRIES_NUM])
         else:
             if split_arg[START] == "":
-                range_ = [1]
+                range_ = [*range(1, int(split_arg[END]) + 1)]
+                if '+' in arg:
+                    range_ = [*range(1, int(split_arg[END]) + 1,
+                                     int(split_arg[STEP]))]
             else:
                 range_ = [int(split_arg[START])]
                 if '-' in arg:
@@ -52,8 +56,6 @@ def parse_startsw_arg(arg: str,
     key_list: list[Key] = []
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
-    if arg[START] == '0':
-        arg = arg.replace('0', "", 1)
     if split_arg[ENTRIES_NUM] != "":
         entries = int(arg[ENTRIES_NUM])
     pick_keys(key_list, sub_strs, [], starts_with = arg.lstrip('/'),
@@ -65,8 +67,6 @@ def parse_endsw_arg(arg: str,
     key_list: list[Key] = []
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
-    if arg[START] == '0':
-        arg = arg.replace('0', "", 1)
     if split_arg[ENTRIES_NUM] != "":
         entries = int(arg[ENTRIES_NUM])
     pick_keys(key_list, sub_strs, [], starts_with = arg.lstrip('\\'),
