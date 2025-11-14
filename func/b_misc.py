@@ -36,6 +36,8 @@ def print_tape(tape: list[int],
         if not observe_runtime:
             print(chunk_index & 15, end = ' ')
         print(tape_str[chunk: chunk + chunk_size], end = "")
+        if not observe_runtime:
+            print()
         chunk_index += 1
         if runtime >= 0:
             print(f" [{runtime}]")

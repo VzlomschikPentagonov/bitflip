@@ -2,6 +2,7 @@
 NUM_STATES: int = 0
 PROGRAM_STR: int = 1
 TAPE_LEN: int = 1
+TAPE_LEN_MAIN: int = 2
 STRIP_1ST_LINE: int = 1
 SUBSTR: int = 0
 PROJNAME: int = 1
