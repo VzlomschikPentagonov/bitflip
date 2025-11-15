@@ -56,7 +56,7 @@ def get_output(b_input: tuple[int, str, int],
     open_br, closed_br = get_addresses(program_str)
     open_br_keys: list[int] = list(open_br.keys())
     closed_br_keys: list[int] = list(closed_br.keys())
-    if not verify:
+    if not verify and not track_runtime:
         print(program_str)
     while program_str[pointer_p] != HALT:
         match program_str[pointer_p]:
@@ -83,7 +83,7 @@ def get_output(b_input: tuple[int, str, int],
             pointer_p += 1
         flag = False
         runtime += 1
-    if not verify and not observe_runtime:
+    if not verify and not observe_runtime and not track_runtime:
         print_data(program_str_len, pointer_p, pointer_t,
                    tape[pointer_t], runtime, len(tape) >> 1)
         print_tape(tape, 128, 191, chunk_size = 7)

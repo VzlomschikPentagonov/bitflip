@@ -1,7 +1,7 @@
 from bitflip.tools.func.v_const import *
 
 def change_inputs(defines: dict[str, str],
-                  *inputs) -> None:
+                  *inputs: int) -> None:
     defines['a'] = defines[str(inputs[0])]
     defines['b'] = defines[str(inputs[1])]
 
@@ -15,7 +15,7 @@ def calculate_check_sum(tape: list[int]) -> int:
     return check_sum - 3
 
 def verify(tape: list[int],
-           *inputs) -> bool:
+           *inputs: int) -> bool:
     status: bool = True
     for cell in CELLS_ON:
         if tape[cell] == 0:
