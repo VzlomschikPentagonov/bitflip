@@ -42,10 +42,7 @@ def goto(address_list: dict[int: int],
 def get_output(b_input: tuple[int, str, int],
                tape: list[int],
                sub_strs: dict[str: str],
-               track_runtime: bool = False,
-               verify: bool = False,
-               observe_runtime: bool = False,
-               breakpoint_: int = -1) -> None | int:
+               **kwargs: bool | int) -> None | int:
     num_states: int = b_input[NUM_STATES]
     program_str: str = compile_program(b_input[PROGRAM_STR], sub_strs) + HALT
     program_str_len: int = len(program_str)
@@ -56,7 +53,7 @@ def get_output(b_input: tuple[int, str, int],
     open_br, closed_br = get_addresses(program_str)
     open_br_keys: list[int] = list(open_br.keys())
     closed_br_keys: list[int] = list(closed_br.keys())
-    if not verify and not track_runtime:
+    if not kwargs["verify"] and not kwargs["track_runtime"]:
         print(program_str)
     while program_str[pointer_p] != HALT:
         match program_str[pointer_p]:
@@ -74,19 +71,21 @@ def get_output(b_input: tuple[int, str, int],
                 if tape[pointer_t] != 0:
                     pointer_p, flag = goto(closed_br,
                                            closed_br_keys, pointer_p)
-        if runtime == breakpoint_:
+        if runtime == kwargs["breakpoint_"]:
             break
-        if observe_runtime:
-            print_tape(tape, 128, 191, observe_runtime = True,
+        if kwargs["observe_runtime"]:
+            print_tape(tape, 128, 191,
+                       observe_runtime = kwargs["observe_runtime"],
                        pos_t = pointer_t - (len(tape) >> 1), runtime = runtime)
         if not flag:
             pointer_p += 1
         flag = False
         runtime += 1
-    if not verify and not observe_runtime and not track_runtime:
+    if (not kwargs["verify"] and not kwargs["observe_runtime"]
+        and not kwargs["track_runtime"]):
         print_data(program_str_len, pointer_p, pointer_t,
                    tape[pointer_t], runtime, len(tape) >> 1)
         print_tape(tape, 128, 191, chunk_size = 7)
-    if track_runtime:
+    if kwargs["track_runtime"]:
         return runtime
     return None

@@ -6,17 +6,21 @@ from bitflip.func.b_constants import TAPE_LEN_MAIN
 
 def main() -> None:
     b_input: tuple[int, str, int] = read_input_file()
-    defines: dict[str: str] = read_include_file()
+    sub_strs: dict[str: str] = read_include_file()
     tape: list[int] = [0] * b_input[TAPE_LEN_MAIN]
     status: bool = True
     for input_a in range(16):
         for input_b in range(16):
-            change_inputs(defines, input_a, input_b)
-            get_output(b_input, tape, defines, verify = True)
+            change_inputs(sub_strs, input_a, input_b)
+            get_output(b_input, tape, sub_strs,
+                       breakpoint_ = -1,
+                       verify = True,
+                       track_runtime = False,
+                       observe_runtime = False)
             status = verify(tape, input_a, input_b)
             check_sum: int = calculate_check_sum(tape)
             print(display_cell(check_sum), end = "")
-            tape: list[int] = [0] * 0x100
+            tape: list[int] = [0] * b_input[TAPE_LEN_MAIN]
         print()
     if status:
         print("Program verified successfully!")
