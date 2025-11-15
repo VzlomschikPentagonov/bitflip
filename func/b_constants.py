@@ -1,6 +1,11 @@
 # various constants
 NUM_STATES: int = 0
 PROGRAM_STR: int = 1
+PROGRAM_STR_LEN: int = 0
+POINTER_T: int = 1
+POINTER_P: int = 2
+FLAG: int = 3
+RUNTIME: int = 4
 TAPE_LEN: int = 1
 TAPE_LEN_MAIN: int = 2
 STRIP_1ST_LINE: int = 1

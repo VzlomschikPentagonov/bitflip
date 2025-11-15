@@ -43,49 +43,47 @@ def get_output(b_input: tuple[int, str, int],
                tape: list[int],
                sub_strs: dict[str: str],
                **kwargs: bool | int) -> None | int:
-    num_states: int = b_input[NUM_STATES]
     program_str: str = compile_program(b_input[PROGRAM_STR], sub_strs) + HALT
-    program_str_len: int = len(program_str)
-    pointer_t: int = len(tape) >> 1
-    pointer_p: int = 0
-    flag: bool = False
-    runtime: int = 0
+    var: list[int | bool] = [len(program_str), len(tape) >> 1, 0, False, 0]
     open_br, closed_br = get_addresses(program_str)
     open_br_keys: list[int] = list(open_br.keys())
     closed_br_keys: list[int] = list(closed_br.keys())
     if not kwargs["verify"] and not kwargs["track_runtime"]:
         print(program_str)
-    while program_str[pointer_p] != HALT:
-        match program_str[pointer_p]:
+    while program_str[var[POINTER_P]] != HALT:
+        match program_str[var[POINTER_P]]:
             case '!':
-                tape[pointer_t] += 1
-                tape[pointer_t] %= num_states
+                tape[var[POINTER_T]] += 1
+                tape[var[POINTER_T]] %= b_input[NUM_STATES]
             case '<':
-                pointer_t -= 1
+                var[POINTER_T] -= 1
             case '>':
-                pointer_t += 1
+                var[POINTER_T] += 1
             case '[':
-                if tape[pointer_t] == 0:
-                    pointer_p, flag = goto(open_br, open_br_keys, pointer_p)
+                if tape[var[POINTER_T]] == 0:
+                    var[POINTER_P], var[FLAG] = goto(open_br, open_br_keys,
+                                                     var[POINTER_P])
             case ']':
-                if tape[pointer_t] != 0:
-                    pointer_p, flag = goto(closed_br,
-                                           closed_br_keys, pointer_p)
-        if runtime == kwargs["breakpoint_"]:
+                if tape[var[POINTER_T]] != 0:
+                    var[POINTER_P], var[FLAG] = goto(closed_br,
+                                                     closed_br_keys,
+                                                     var[POINTER_P])
+        if var[RUNTIME] == kwargs["breakpoint_"]:
             break
         if kwargs["observe_runtime"]:
             print_tape(tape, 128, 191,
                        observe_runtime = kwargs["observe_runtime"],
-                       pos_t = pointer_t - (len(tape) >> 1), runtime = runtime)
-        if not flag:
-            pointer_p += 1
-        flag = False
-        runtime += 1
+                       pos_t = var[POINTER_T] - (len(tape) >> 1),
+                       runtime = var[RUNTIME])
+        if not var[FLAG]:
+            var[POINTER_P] += 1
+        var[FLAG] = False
+        var[RUNTIME] += 1
     if (not kwargs["verify"] and not kwargs["observe_runtime"]
         and not kwargs["track_runtime"]):
-        print_data(program_str_len, pointer_p, pointer_t,
-                   tape[pointer_t], runtime, len(tape) >> 1)
+        print_data(var[PROGRAM_STR_LEN], var[POINTER_P], var[POINTER_T],
+                   tape[var[POINTER_T]], var[RUNTIME], len(tape) >> 1)
         print_tape(tape, 128, 191, chunk_size = 7)
     if kwargs["track_runtime"]:
-        return runtime
+        return var[RUNTIME]
     return None
