@@ -71,7 +71,7 @@ def get_output(b_input: tuple[int, str, int],
         if var[RUNTIME] == kwargs["breakpoint_"]:
             break
         if kwargs["observe_runtime"]:
-            print_tape(tape, 128, 191,
+            print_tape(tape, kwargs["start"], kwargs["end"],
                        observe_runtime = kwargs["observe_runtime"],
                        pos_t = var[POINTER_T] - (len(tape) >> 1),
                        runtime = var[RUNTIME])
@@ -83,7 +83,8 @@ def get_output(b_input: tuple[int, str, int],
         and not kwargs["track_runtime"]):
         print_data(var[PROGRAM_STR_LEN], var[POINTER_P], var[POINTER_T],
                    tape[var[POINTER_T]], var[RUNTIME], len(tape) >> 1)
-        print_tape(tape, 128, 191, chunk_size = 7)
+        print_tape(tape, kwargs["start"], kwargs["end"],
+                   chunk_size = kwargs["chunk_size"])
     if kwargs["track_runtime"]:
         return var[RUNTIME]
     return None
