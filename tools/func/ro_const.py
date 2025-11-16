@@ -1,1 +1,7 @@
-DUMMY_CONST: None
+HEADER_SIZE: int = 54
+TOTAL_SIZE_OFF: int = 2
+DATA_SIZE_OFF: int = 34
+WIDTH_OFF: int = 18
+HEIGHT_OFF: int = 22
+S_SHORT: int = 2
+S_LONG: int = 4

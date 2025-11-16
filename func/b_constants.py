@@ -24,6 +24,8 @@ OFF: int = 46
 ON: int = 18
 CHR_ZERO: int = 48
 DEFAULT_CHUNK_SIZE: int = -1
+GRAY: int = 127
+WHITE: int = 255
 HALT: str = 'h'
 
 # regex strings
