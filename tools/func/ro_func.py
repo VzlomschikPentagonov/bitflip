@@ -22,4 +22,4 @@ def get_image(header_data: bytes,
               img_data: list[list[bytes]]) -> None:
     img_file: BinaryIO = open("./runtime.bmp", "w+b")
     img_file.write(header_data + b"".join([b"".join(scanline)
-                                           for scanline in img_data]))
+                                           for scanline in reversed(img_data)]))

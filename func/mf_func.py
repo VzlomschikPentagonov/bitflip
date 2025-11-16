@@ -79,7 +79,7 @@ def load_file(name: str) -> None:
             header_file: TextIO = open(f"./code/{name}.hbflp")
             header_file_data: list[str] = read_file(header_file)
         code_file_data: list[str] = read_file(code_file)
-        input_file.write("2\n" + get_code(code_file_data))
+        input_file.write("2,256\n" + get_code(code_file_data))
         include_file.write(get_code(header_file_data))
     elif match(RE_PROJNAME, name):
         load_project(name, input_file, include_file)

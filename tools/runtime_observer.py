@@ -14,9 +14,10 @@ def main() -> None:
                track_runtime = False,
                observe_runtime = True,
                get_image_data = True,
-               start = 128, end = 191))
-    header_data: bytes = get_header(img_data)
-    get_image(header_data, img_data)
+               start = 128, end = 180))
+    if type(img_data) is list:
+        header_data: bytes = get_header(img_data)
+        get_image(header_data, img_data)
     return None
 
 if __name__ == "__main__":

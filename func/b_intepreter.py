@@ -78,10 +78,10 @@ def get_output(b_input: tuple[int, str, int],
                                          for cell in tape[
                                          kwargs["start"]: kwargs["end"]]]
                 scanline[var[POINTER_T] - kwargs["start"]] = (bytes(
-                        [WHITE, tape[var[POINTER_T]],
-                         tape[var[POINTER_T]]]))
+                        [WHITE, tape[var[POINTER_T]] * GRAY,
+                         tape[var[POINTER_T]] * GRAY]))
                 padding: int = (kwargs["end"] - kwargs["start"]) % 4
-                scanline.append(bytes(padding * 4))
+                scanline.append(bytes(padding))
                 image_data.append(scanline)
             else:
                 print_tape(tape, kwargs["start"], kwargs["end"],
