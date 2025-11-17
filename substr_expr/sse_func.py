@@ -10,6 +10,8 @@ def pick_keys(key_list: list[Key],
               ends_with: str = STR_DEFAULT,
               keyword: str = STR_DEFAULT,
               entries_: int = ENTRIES_DEFAULT) -> None:
+    if entries_ == 0:
+        return None
     for key in sub_strs.keys():
         if len(key) in lengths:
             key_list.append(Key(key, entries = entries_))
@@ -33,21 +35,22 @@ def parse_digit_arg(arg: str,
         if '^' in arg:
             if split_arg[ENTRIES_NUM] != "":
                 entries = int(arg[ENTRIES_NUM])
-        else:
-            if split_arg[START] == "":
-                range_ = [*range(1, int(split_arg[END]) + 1)]
-                if '+' in arg:
-                    range_ = [*range(1, int(split_arg[END]) + 1,
-                                     int(split_arg[STEP]))]
             else:
-                range_ = [int(split_arg[START])]
-                if '-' in arg:
+                entries = 0
+        if split_arg[START] == "":
+            range_ = [*range(1, int(split_arg[END]) + 1)]
+            if '+' in arg:
+                range_ = [*range(1, int(split_arg[END]) + 1,
+                                 int(split_arg[STEP]))]
+        else:
+            range_ = [int(split_arg[START])]
+            if '-' in arg:
+                range_ = [*range(int(split_arg[START]),
+                                 int(split_arg[END]) + 1)]
+                if '+' in arg:
                     range_ = [*range(int(split_arg[START]),
-                                     int(split_arg[END]) + 1)]
-                    if '+' in arg:
-                        range_ = [*range(int(split_arg[START]),
-                                         int(split_arg[END]) + 1,
-                                         int(split_arg[STEP]))]
+                                     int(split_arg[END]) + 1,
+                                     int(split_arg[STEP]))]
     pick_keys(key_list, sub_strs, lengths = range_, entries_ = entries)
     return key_list
 
