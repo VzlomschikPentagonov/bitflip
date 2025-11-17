@@ -59,8 +59,12 @@ def parse_startsw_arg(arg: str,
     key_list: list[Key] = []
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
-    if split_arg[ENTRIES_NUM] != "":
-        entries = int(arg[ENTRIES_NUM])
+    print(split_arg)
+    if len(split_arg) > 1:
+        if split_arg[ENTRIES_NUM] != "":
+            entries = int(arg[ENTRIES_NUM])
+        else:
+            entries = 0
     pick_keys(key_list, sub_strs, [], starts_with = arg.lstrip('/'),
               entries_ = entries, )
     return key_list
@@ -70,8 +74,11 @@ def parse_endsw_arg(arg: str,
     key_list: list[Key] = []
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
-    if split_arg[ENTRIES_NUM] != "":
-        entries = int(arg[ENTRIES_NUM])
+    if len(split_arg) > 1:
+        if split_arg[ENTRIES_NUM] != "":
+            entries = int(arg[ENTRIES_NUM])
+        else:
+            entries = 0
     pick_keys(key_list, sub_strs, [], starts_with = arg.lstrip('\\'),
               entries_ = entries)
     return key_list
