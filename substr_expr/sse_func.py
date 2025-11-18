@@ -38,6 +38,8 @@ def parse_digit_arg(arg: str,
             else:
                 entries = 0
         if split_arg[START] == "":
+            if split_arg[END] == "":
+                split_arg[END] = "0"
             range_ = [*range(1, int(split_arg[END]) + 1)]
             if '+' in arg:
                 range_ = [*range(1, int(split_arg[END]) + 1,
@@ -97,6 +99,8 @@ def parse_keyword_arg(arg: str,
 
 def parse_sse_arg(arg: str,
                   sub_strs: dict[str: str]) -> list[Key]:
+    if arg == "":
+        return parse_digit_arg(arg, sub_strs)
     match arg[START]:
         case '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '-' | '^':
             key_list: list[Key]  = parse_digit_arg(arg, sub_strs)
