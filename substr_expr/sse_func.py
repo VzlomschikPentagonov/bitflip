@@ -3,6 +3,8 @@ from bitflip.substr_expr.sse_classes import *
 from bitflip.func.b_misc import print_error
 from re import match, split
 
+# list[Key] -> list[type: list[int] | str, keys: list[str], num_entries: int]
+
 def pick_keys(key_list: list[Key],
               sub_strs: dict[str: str],
               lengths: list[int],
