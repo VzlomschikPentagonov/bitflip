@@ -3,9 +3,9 @@ from bitflip.substr_expr.sse_classes import *
 from bitflip.func.b_misc import print_error
 from re import match, split
 
-# list[Key] -> list[type: list[int] | str, keys: list[str], num_entries: int]
+# list[Arg] -> list[type: list[int] | str, keys: list[str], num_entries: int]
 
-def pick_keys(key_list: list[Key],
+def pick_keys(key_list: list[Arg],
               sub_strs: dict[str: str],
               lengths: list[int],
               starts_with: str = STR_DEFAULT,
@@ -16,17 +16,17 @@ def pick_keys(key_list: list[Key],
         return None
     for key in sub_strs.keys():
         if len(key) in lengths:
-            key_list.append(Key(key, entries = entries_))
+            key_list.append(Arg(key, entries = entries_))
         elif match(f"^{starts_with}", key):
-            key_list.append(Key(key, entries = entries_))
+            key_list.append(Arg(key, entries = entries_))
         elif match(f".*{ends_with}$", key):
-            key_list.append(Key(key, entries = entries_))
+            key_list.append(Arg(key, entries = entries_))
         elif key == keyword:
-            key_list.append(Key(key, entries = entries_))
+            key_list.append(Arg(key, entries = entries_))
 
 def parse_digit_arg(arg: str,
-                    sub_strs: dict[str: str]) -> list[Key]:
-    key_list: list[Key] = []
+                    sub_strs: dict[str: str]) -> list[Arg]:
+    key_list: list[Arg] = []
     range_: list[int] = []
     entries: int = ENTRIES_DEFAULT
     if arg == "":
@@ -59,8 +59,8 @@ def parse_digit_arg(arg: str,
     return key_list
 
 def parse_startsw_arg(arg: str,
-                      sub_strs: dict[str: str]) -> list[Key]:
-    key_list: list[Key] = []
+                      sub_strs: dict[str: str]) -> list[Arg]:
+    key_list: list[Arg] = []
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
     print(split_arg)
@@ -74,8 +74,8 @@ def parse_startsw_arg(arg: str,
     return key_list
 
 def parse_endsw_arg(arg: str,
-                    sub_strs: dict[str: str]) -> list[Key]:
-    key_list: list[Key] = []
+                    sub_strs: dict[str: str]) -> list[Arg]:
+    key_list: list[Arg] = []
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
     if len(split_arg) > 1:
@@ -88,8 +88,8 @@ def parse_endsw_arg(arg: str,
     return key_list
 
 def parse_keyword_arg(arg: str,
-                      sub_strs: dict[str: str]) -> list[Key]:
-    key_list: list[Key] = []
+                      sub_strs: dict[str: str]) -> list[Arg]:
+    key_list: list[Arg] = []
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
     if arg[START] == '0':
@@ -100,24 +100,24 @@ def parse_keyword_arg(arg: str,
     return key_list
 
 def parse_sse_arg(arg: str,
-                  sub_strs: dict[str: str]) -> list[Key]:
+                  sub_strs: dict[str: str]) -> list[Arg]:
     if arg == "":
         return parse_digit_arg(arg, sub_strs)
     match arg[START]:
         case '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '-' | '^':
-            key_list: list[Key]  = parse_digit_arg(arg, sub_strs)
+            key_list: list[Arg]  = parse_digit_arg(arg, sub_strs)
         case '/':
-            key_list: list[Key]  = parse_startsw_arg(arg, sub_strs)
+            key_list: list[Arg]  = parse_startsw_arg(arg, sub_strs)
         case '\\':
-            key_list: list[Key]  = parse_endsw_arg(arg, sub_strs)
+            key_list: list[Arg]  = parse_endsw_arg(arg, sub_strs)
         case '0' | _:
-            key_list: list[Key]  = parse_keyword_arg(arg, sub_strs)
+            key_list: list[Arg]  = parse_keyword_arg(arg, sub_strs)
     return key_list
 
 def parse_substr_expr(substr_expr: str,
-                      sub_strs: dict[str: str]) -> tuple[int, list[Key]]:
+                      sub_strs: dict[str: str]) -> tuple[int, list[Arg]]:
     split_expr: tuple = substr_expr.partition('|')
-    key_list: list[Key] = []
+    key_list: list[Arg] = []
     num_args: int = 1
     if(match(RE_SUBSTR_D1, split_expr[NUM_ARGS])
        and match(RE_SUBSTR_D2, split_expr[NUM_ARGS])):
@@ -126,13 +126,13 @@ def parse_substr_expr(substr_expr: str,
     for arg in split_args:
         arg = arg.replace(' ', "")
         if arg != "":
-            key_list: list[Key] = parse_sse_arg(arg, sub_strs)
+            key_list: list[Arg] = parse_sse_arg(arg, sub_strs)
         else:
             parse_digit_arg(arg, sub_strs)
     return num_args, key_list
 
 def check_substr_expr(substr_expr: str,
-                      sub_strs: dict[str: str]) -> int | tuple[int, list[Key]]:
+                      sub_strs: dict[str: str]) -> int | tuple[int, list[Arg]]:
     if substr_expr == "":
         return 1
     elif(match(RE_SUBSTR_D1, substr_expr)
