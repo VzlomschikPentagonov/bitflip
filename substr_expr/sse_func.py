@@ -5,7 +5,7 @@ from re import match, split
 
 # list[Arg] -> list[type: list[int] | str, keys: list[str], num_entries: int]
 
-def pick_keys(key_list: list[Arg],
+def pick_keys(key_list: Arg,
               sub_strs: dict[str: str],
               lengths: list[int],
               starts_with: str = STR_DEFAULT,
@@ -14,15 +14,16 @@ def pick_keys(key_list: list[Arg],
               entries_: int = ENTRIES_DEFAULT) -> None:
     if entries_ == 0:
         return None
+    key_list = Arg(lengths, [], entries_)
     for key in sub_strs.keys():
         if len(key) in lengths:
-            key_list.append(Arg(key, entries = entries_))
+            key_list.keys.append(key)
         elif match(f"^{starts_with}", key):
-            key_list.append(Arg(key, entries = entries_))
+            key_list.keys.append(key)
         elif match(f".*{ends_with}$", key):
-            key_list.append(Arg(key, entries = entries_))
+            key_list.keys.append(key)
         elif key == keyword:
-            key_list.append(Arg(key, entries = entries_))
+            key_list.keys.append(key)
 
 def parse_digit_arg(arg: str,
                     sub_strs: dict[str: str]) -> list[Arg]:
@@ -115,9 +116,9 @@ def parse_sse_arg(arg: str,
     return key_list
 
 def parse_substr_expr(substr_expr: str,
-                      sub_strs: dict[str: str]) -> tuple[int, list[Arg]]:
+                      sub_strs: dict[str: str]) -> tuple[int, Arg]:
     split_expr: tuple = substr_expr.partition('|')
-    key_list: list[Arg] = []
+    key_list: Arg = Arg([], [], -1)
     num_args: int = 1
     if(match(RE_SUBSTR_D1, split_expr[NUM_ARGS])
        and match(RE_SUBSTR_D2, split_expr[NUM_ARGS])):
@@ -132,7 +133,7 @@ def parse_substr_expr(substr_expr: str,
     return num_args, key_list
 
 def check_substr_expr(substr_expr: str,
-                      sub_strs: dict[str: str]) -> int | tuple[int, list[Arg]]:
+                      sub_strs: dict[str: str]) -> int | tuple[int, Arg]:
     if substr_expr == "":
         return 1
     elif(match(RE_SUBSTR_D1, substr_expr)
