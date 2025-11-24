@@ -14,7 +14,6 @@ def pick_keys(key_list: Arg,
               entries_: int = ENTRIES_DEFAULT) -> None:
     if entries_ == 0:
         return None
-    key_list = Arg(lengths, [], entries_)
     for key in sub_strs.keys():
         if len(key) in lengths:
             key_list.keys.append(key)
@@ -27,7 +26,7 @@ def pick_keys(key_list: Arg,
 
 def parse_digit_arg(arg: str,
                     sub_strs: dict[str: str]) -> Arg:
-    key_list: Arg = Arg([], [], -1)
+    key_list: Arg = Arg([], -1)
     range_: list[int] = []
     entries: int = ENTRIES_DEFAULT
     if arg == "":
@@ -61,7 +60,7 @@ def parse_digit_arg(arg: str,
 
 def parse_startsw_arg(arg: str,
                       sub_strs: dict[str: str]) -> Arg:
-    key_list: Arg = Arg([], [], -1)
+    key_list: Arg = Arg([], -1)
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
     print(split_arg)
@@ -76,7 +75,7 @@ def parse_startsw_arg(arg: str,
 
 def parse_endsw_arg(arg: str,
                     sub_strs: dict[str: str]) -> Arg:
-    key_list: Arg = Arg([], [], -1)
+    key_list: Arg = Arg([], -1)
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
     if len(split_arg) > 1:
@@ -90,7 +89,7 @@ def parse_endsw_arg(arg: str,
 
 def parse_keyword_arg(arg: str,
                       sub_strs: dict[str: str]) -> Arg:
-    key_list: Arg = Arg([], [], -1)
+    key_list: Arg = Arg([], -1)
     entries: int = ENTRIES_DEFAULT
     split_arg: list[str] = arg.split('^')
     if arg[START] == '0':
@@ -118,7 +117,7 @@ def parse_sse_arg(arg: str,
 def parse_substr_expr(substr_expr: str,
                       sub_strs: dict[str: str]) -> tuple[int, Arg]:
     split_expr: tuple = substr_expr.partition('|')
-    key_list: Arg = Arg([], [], -1)
+    key_list: Arg = Arg([], -1)
     num_args: int = 1
     if(match(RE_SUBSTR_D1, split_expr[NUM_ARGS])
        and match(RE_SUBSTR_D2, split_expr[NUM_ARGS])):
