@@ -7,7 +7,24 @@ def pick_keys(key_list: list[str],
               lengths: list[int],
               starts_with: str = STR_DEFAULT,
               ends_with: str = STR_DEFAULT,
-              keyword: str = STR_DEFAULT) -> None:
+              keyword: str = STR_DEFAULT,
+              all_len: bool = False,
+              exclude: bool = False) -> None:
+    if all_len:
+        for key in sub_strs.keys():
+            key_list.append(key)
+        return None
+    if exclude:
+        for key in sub_strs.keys():
+            if(not match(f"^{starts_with}", key) and
+            starts_with != STR_DEFAULT):
+                key_list.append(key)
+            elif(not match(f".*{ends_with}$", key) and
+            ends_with != STR_DEFAULT):
+                key_list.append(key)
+            elif key != keyword and keyword != STR_DEFAULT:
+                key_list.append(key)
+        return None
     for key in sub_strs.keys():
         if len(key) in lengths:
             key_list.append(key)
@@ -28,9 +45,10 @@ def parse_digit_arg(arg: str,
     if match(RE_DIGIT_ARG, arg):
         split_arg: list[str] = split(RE_SPLIT_DIGIT_ARG, arg)
         if split_arg[START] == "":
-            if split_arg[END] == "":
-                split_arg[END] = "0"
-            range_ = [*range(1, int(split_arg[END]) + 1)]
+            if split_arg[END] != "":
+                range_ = [*range(1, int(split_arg[END]) + 1)]
+            else:
+                pick_keys(key_list, sub_strs, [], all_len = True)
             if '+' in arg:
                 range_ = [*range(1, int(split_arg[END]) + 1,
                                  int(split_arg[STEP]))]
@@ -48,27 +66,33 @@ def parse_digit_arg(arg: str,
             for length in [len(key) for key in sub_strs.keys()]:
                 if length not in range_:
                     range_inv.append(length)
-    print(split_arg)
-    pick_keys(key_list, sub_strs, lengths = range_)
+            pick_keys(key_list, sub_strs, range_inv)
+            return key_list
+    pick_keys(key_list, sub_strs, range_)
     return key_list
 
 def parse_startsw_arg(arg: str,
                       sub_strs: dict[str: str]) -> list[str]:
     key_list: list[str] = []
     split_arg: list[str] = arg.split('^')
-    if len(split_arg) > 1:
-        if split_arg[ENTRIES_NUM] != "":
-            entries = int(arg[ENTRIES_NUM])
-        else:
-            entries = 0
-    pick_keys(key_list, sub_strs, [], starts_with = arg.lstrip('/'))
+    if '^' in arg:
+        pick_keys(key_list, sub_strs, [],
+              starts_with = split_arg[START].lstrip('/'), exclude = True)
+        return key_list
+    pick_keys(key_list, sub_strs, [],
+              starts_with = split_arg[START].lstrip('/'))
     return key_list
 
 def parse_endsw_arg(arg: str,
                     sub_strs: dict[str: str]) -> list[str]:
     key_list: list[str] = []
     split_arg: list[str] = arg.split('^')
-    pick_keys(key_list, sub_strs, [], starts_with = arg.lstrip('\\'))
+    if '^' in arg:
+        pick_keys(key_list, sub_strs, [],
+              ends_with = split_arg[START].lstrip('\\'), exclude = True)
+        return key_list
+    pick_keys(key_list, sub_strs, [],
+              ends_with = split_arg[START].lstrip('\\'))
     return key_list
 
 def parse_keyword_arg(arg: str,
@@ -77,7 +101,11 @@ def parse_keyword_arg(arg: str,
     split_arg: list[str] = arg.split('^')
     if arg[START] == '0':
         arg = arg.replace('0', "", 1)
-    pick_keys(key_list, sub_strs, [], keyword = arg)
+    if '^' in arg:
+        pick_keys(key_list, sub_strs, [],
+              keyword = split_arg[START], exclude = True)
+        return key_list
+    pick_keys(key_list, sub_strs, [], keyword = split_arg[START])
     return key_list
 
 def parse_sse_arg(arg: str,
