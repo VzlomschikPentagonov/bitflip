@@ -94,16 +94,15 @@ def read_include_file() -> dict[str, str]:
     return_to_main_dir()
     input_file: TextIO = open("include.txt")
     input_file_data: list[str] = input_file.readlines()
-    ifd_str: str = "".join(input_file_data)
-    max_nest_lvl: int = count_brackets(ifd_str)
     sub_strs: dict[str, str] = {}
     for line in input_file_data:
         line_nc: str = line.partition('#')[SUBSTR].replace(' ', "")
-        if match(RE_DEFFILE, line):
+        # if match(RE_DEFFILE, line):
+        #     key, value = parse_substr_line(line_nc)
+        #     sub_strs[key] = value
+        if match(RE_DEFFILE_BR, line):
             key, value = parse_substr_line(line_nc)
-            sub_strs[key] = value
-        elif match(RE_DEFFILE_BR, line):
-            key, value = parse_substr_line(line_nc)
+            max_nest_lvl: int = count_brackets(value)
             for nest_lvl in range(max_nest_lvl, 0, -1):
                 value = remove_brackets(value, sub_strs, nest_lvl)
             sub_strs[key] = value
