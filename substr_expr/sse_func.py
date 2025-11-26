@@ -99,9 +99,9 @@ def parse_endsw_arg(arg: str,
 def parse_keyword_arg(arg: str,
                       sub_strs: dict[str: str]) -> list[str]:
     key_list: list[str] = []
-    split_arg: list[str] = arg.split('^')
     if arg[START] == '0':
         arg = arg.replace('0', "", 1)
+    split_arg: list[str] = arg.split('^')
     if '^' in arg:
         pick_keys(key_list, sub_strs, [],
               keyword = split_arg[START], exclude = True)
@@ -127,7 +127,7 @@ def parse_sse_arg(arg: str,
 def parse_substr_expr(substr_expr: str,
                       sub_strs: dict[str: str]) -> tuple[int, list[str]]:
     split_expr: tuple = substr_expr.partition(':')
-    key_list: list[str] = []
+    key_list: list[list[str]] = []
     num_args: int = 1
     if(match(RE_SUBSTR_D1, split_expr[NUM_ARGS])
        and match(RE_SUBSTR_D2, split_expr[NUM_ARGS])):
@@ -136,10 +136,12 @@ def parse_substr_expr(substr_expr: str,
     for arg in split_args:
         arg = arg.replace(' ', "")
         if arg != "":
-            key_list: list[str] = parse_sse_arg(arg, sub_strs)
+            key_list.append(parse_sse_arg(arg, sub_strs))
         else:
-            parse_digit_arg(arg, sub_strs)
-    return num_args, list({key: None for key in key_list}.keys())
+            key_list.append(parse_digit_arg(arg, sub_strs))
+    return (num_args, list({string: None for string in
+                            [key for arg_keys in key_list
+                                 for key in arg_keys]}.keys()))
 
 def check_substr_expr(substr_expr: str,
                       sub_strs: dict[str: str]) -> int | tuple[int, list[str]]:
