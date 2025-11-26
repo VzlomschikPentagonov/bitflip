@@ -6,7 +6,6 @@ END: int = 1
 STEP: int = 2
 LENGTH_DEFAULT: int = 1
 STR_DEFAULT: str = "%"
-PICK_LENGTH_N: int = 0
 
 # regex strings
 RE_SUBSTR_D1: str = r"^[1-9].*\d*$"
