@@ -40,7 +40,7 @@ def parse_digit_arg(arg: str,
     key_list: list[str] = []
     range_: list[int] = []
     if arg == "":
-        pick_keys(key_list, sub_strs, [1])
+        pick_keys(key_list, sub_strs, [LENGTH_DEFAULT])
         return key_list
     if match(RE_DIGIT_ARG, arg):
         split_arg: list[str] = split(RE_SPLIT_DIGIT_ARG, arg)
