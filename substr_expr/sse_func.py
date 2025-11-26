@@ -49,6 +49,7 @@ def parse_digit_arg(arg: str,
                 range_ = [*range(1, int(split_arg[END]) + 1)]
             else:
                 pick_keys(key_list, sub_strs, [], all_len = True)
+                return key_list
             if '+' in arg:
                 range_ = [*range(1, int(split_arg[END]) + 1,
                                  int(split_arg[STEP]))]
@@ -125,8 +126,8 @@ def parse_sse_arg(arg: str,
 
 def parse_substr_expr(substr_expr: str,
                       sub_strs: dict[str: str]) -> tuple[int, Arg]:
-    split_expr: tuple = substr_expr.partition('|')
-    key_list: Arg = Arg([], -1)
+    split_expr: tuple = substr_expr.partition(':')
+    key_list: list[str] = []
     num_args: int = 1
     if(match(RE_SUBSTR_D1, split_expr[NUM_ARGS])
        and match(RE_SUBSTR_D2, split_expr[NUM_ARGS])):
