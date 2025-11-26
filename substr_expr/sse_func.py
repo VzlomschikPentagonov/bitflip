@@ -125,7 +125,7 @@ def parse_sse_arg(arg: str,
     return key_list
 
 def parse_substr_expr(substr_expr: str,
-                      sub_strs: dict[str: str]) -> tuple[int, Arg]:
+                      sub_strs: dict[str: str]) -> tuple[int, list[str]]:
     split_expr: tuple = substr_expr.partition(':')
     key_list: list[str] = []
     num_args: int = 1
@@ -136,13 +136,13 @@ def parse_substr_expr(substr_expr: str,
     for arg in split_args:
         arg = arg.replace(' ', "")
         if arg != "":
-            key_list: Arg = parse_sse_arg(arg, sub_strs)
+            key_list: list[str] = parse_sse_arg(arg, sub_strs)
         else:
             parse_digit_arg(arg, sub_strs)
-    return num_args, key_list
+    return num_args, list({key: None for key in key_list}.keys())
 
 def check_substr_expr(substr_expr: str,
-                      sub_strs: dict[str: str]) -> int | tuple[int, Arg]:
+                      sub_strs: dict[str: str]) -> int | tuple[int, list[str]]:
     if substr_expr == "":
         return 1
     elif(match(RE_SUBSTR_D1, substr_expr)
