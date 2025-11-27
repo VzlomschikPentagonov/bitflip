@@ -69,16 +69,20 @@ def parse_digit_arg(arg: str,
                     range_inv.append(length)
             pick_keys(key_list, sub_strs, range_inv)
             return key_list
+    else:
+        print_error("Invalid sub string expression")
     pick_keys(key_list, sub_strs, range_)
     return key_list
 
 def parse_startsw_arg(arg: str,
                       sub_strs: dict[str: str]) -> list[str]:
+    if not match(RE_STARTW_ARG, arg):
+        print_error("Invalid sub string expression")
     key_list: list[str] = []
     split_arg: list[str] = arg.split('^')
     if '^' in arg:
         pick_keys(key_list, sub_strs, [],
-              starts_with = split_arg[START].lstrip('/'), exclude = True)
+                  starts_with = split_arg[START].lstrip('/'), exclude = True)
         return key_list
     pick_keys(key_list, sub_strs, [],
               starts_with = split_arg[START].lstrip('/'))
@@ -86,11 +90,13 @@ def parse_startsw_arg(arg: str,
 
 def parse_endsw_arg(arg: str,
                     sub_strs: dict[str: str]) -> list[str]:
+    if not match(RE_ENDSW_ARG, arg):
+        print_error("Invalid sub string expression")
     key_list: list[str] = []
     split_arg: list[str] = arg.split('^')
     if '^' in arg:
         pick_keys(key_list, sub_strs, [],
-              ends_with = split_arg[START].lstrip('\\'), exclude = True)
+                  ends_with = split_arg[START].lstrip('\\'), exclude = True)
         return key_list
     pick_keys(key_list, sub_strs, [],
               ends_with = split_arg[START].lstrip('\\'))
@@ -98,13 +104,15 @@ def parse_endsw_arg(arg: str,
 
 def parse_keyword_arg(arg: str,
                       sub_strs: dict[str: str]) -> list[str]:
+    if not match(RE_KEYWORD_ARG, arg):
+        print_error("Invalid sub string expression")
     key_list: list[str] = []
     if arg[START] == '0':
         arg = arg.replace('0', "", 1)
     split_arg: list[str] = arg.split('^')
     if '^' in arg:
         pick_keys(key_list, sub_strs, [],
-              keyword = split_arg[START], exclude = True)
+                  keyword = split_arg[START], exclude = True)
         return key_list
     pick_keys(key_list, sub_strs, [], keyword = split_arg[START])
     return key_list
@@ -126,7 +134,7 @@ def parse_sse_arg(arg: str,
 
 def parse_substr_expr(substr_expr: str,
                       sub_strs: dict[str: str]) -> tuple[int, list[str]]:
-    split_expr: tuple = substr_expr.partition(':')
+    split_expr: tuple = substr_expr.partition(';')
     key_list: list[list[str]] = []
     num_args: int = 1
     if(match(RE_SUBSTR_D1, split_expr[NUM_ARGS])

@@ -1,3 +1,5 @@
+from bitflip.substr_expr.sse_const import RE_SUBSTR_CHARSET
+
 # various constants
 NUM_STATES: int = 0
 PROGRAM_STR: int = 1
@@ -33,7 +35,7 @@ CHAR_SET: str = r"!<>[]"
 RE_CHARSET: str = r"!<>\[\]"
 RE_REPSTR: str = r"^([%s]+,\s*\d+)$" % RE_CHARSET
 RE_DEFINE: str = r"^(\w+)$"
-RE_DEFFILE: str = r"^(\w+:\s*[%s]*)$" % RE_CHARSET
-RE_DEFFILE_BR: str = r"^(\w+:\s*[%s{}\s\w,]+)$" % RE_CHARSET
+RE_DEFFILE_BR: str = r"^([%s{}]+:\s*[%s{}\s\w,]+)$" %(RE_SUBSTR_CHARSET,
+                                                      RE_CHARSET)
 RE_FILENAME: str = r"^[^\\/*\"<>?.]+$"
 RE_PROJNAME: str = r"^\.[^\\/*\"<>?.]+$"

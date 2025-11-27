@@ -49,7 +49,7 @@ def get_output(b_input: tuple[int, str, int],
     open_br_keys: list[int] = list(open_br.keys())
     closed_br_keys: list[int] = list(closed_br.keys())
     if(not kwargs["verify"] and not kwargs["observe_runtime"]
-            and not kwargs["track_runtime"]):
+       and not kwargs["track_runtime"]):
         print(program_str)
     image_data: list[list[bytes]] = []
     while program_str[var[POINTER_P]] != HALT:

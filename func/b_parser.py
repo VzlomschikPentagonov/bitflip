@@ -99,6 +99,7 @@ def read_include_file() -> dict[str, str]:
         line_nc: str = line.partition('#')[SUBSTR].replace(' ', "")
         if match(RE_DEFFILE_BR, line):
             key, value = parse_substr_line(line_nc)
+
             max_nest_lvl: int = count_brackets(value)
             for nest_lvl in range(max_nest_lvl, 0, -1):
                 value = remove_brackets(value, sub_strs, nest_lvl)
