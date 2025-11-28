@@ -52,6 +52,9 @@ def parse_substr_line(line: str) -> tuple[str, str]:
     value: str = split_line[VALUE]
     return key, value.rstrip('\n')
 
+def parse_substr_w_expr(sub_strs: dict[str, str]) -> str:
+    return ""
+
 def parse_bracket_str(string: str,
                       sub_strs: dict[str, str]) -> str:
     value: str = ""
@@ -67,6 +70,7 @@ def parse_bracket_str(string: str,
         for key in sub_strs.keys():
             if string == key:
                 return sub_strs[key]
+        return parse_substr_w_expr(sub_strs)
 
 def remove_brackets(value: str,
                     sub_strs: dict[str, str],
@@ -108,6 +112,7 @@ def read_include_file() -> dict[str, str]:
                 for token in split(r"/{%s/}" % RE_SUBSTR_CHARSET, key):
                     if not token.isidentifier() and token != "":
                         print_error("Invalid sub string key")
+
             else:
                 if not key.isidentifier():
                     print_error("Invalid sub string key")
