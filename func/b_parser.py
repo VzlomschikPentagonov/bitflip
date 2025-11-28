@@ -1,7 +1,10 @@
 from typing import TextIO
-from re import match
+from re import match, split
 from bitflip.func.b_constants import *
 from os import getcwd, chdir
+
+from bitflip.func.b_misc import print_error
+
 
 def return_to_main_dir():
     curr_dir: list[str] = getcwd().split('\\')
@@ -99,7 +102,14 @@ def read_include_file() -> dict[str, str]:
         line_nc: str = line.partition('#')[SUBSTR].replace(' ', "")
         if match(RE_DEFFILE_BR, line):
             key, value = parse_substr_line(line_nc)
-
+            if '{' in key or '}' in key:
+                if count_brackets(key) != 1:
+                    print_error("Invalid sub string key")
+                for token in split(r"/{%s/}" % RE_SUBSTR_CHARSET, key):
+                    if not token.isidentifier() and token != "":
+                        print_error("Invalid sub string key")
+            if not key.isidentifier():
+                print_error("Invalid sub string key")
             max_nest_lvl: int = count_brackets(value)
             for nest_lvl in range(max_nest_lvl, 0, -1):
                 value = remove_brackets(value, sub_strs, nest_lvl)
