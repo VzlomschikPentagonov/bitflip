@@ -108,11 +108,12 @@ def read_include_file() -> dict[str, str]:
                 for token in split(r"/{%s/}" % RE_SUBSTR_CHARSET, key):
                     if not token.isidentifier() and token != "":
                         print_error("Invalid sub string key")
-            if not key.isidentifier():
-                print_error("Invalid sub string key")
-            max_nest_lvl: int = count_brackets(value)
-            for nest_lvl in range(max_nest_lvl, 0, -1):
-                value = remove_brackets(value, sub_strs, nest_lvl)
+            else:
+                if not key.isidentifier():
+                    print_error("Invalid sub string key")
+                max_nest_lvl: int = count_brackets(value)
+                for nest_lvl in range(max_nest_lvl, 0, -1):
+                    value = remove_brackets(value, sub_strs, nest_lvl)
             sub_strs[key] = value
     return sub_strs
 
