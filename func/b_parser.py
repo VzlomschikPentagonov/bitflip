@@ -1,10 +1,8 @@
 from typing import TextIO
 from re import match, split
-from bitflip.func.b_constants import *
 from os import getcwd, chdir
-
+from bitflip.func.b_constants import *
 from bitflip.func.b_misc import print_error
-
 
 def return_to_main_dir():
     curr_dir: list[str] = getcwd().split('\\')
@@ -53,6 +51,7 @@ def parse_substr_line(line: str) -> tuple[str, str]:
     return key, value.rstrip('\n')
 
 def parse_substr_w_expr(sub_strs: dict[str, str]) -> str:
+
     return ""
 
 def parse_bracket_str(string: str,
@@ -112,7 +111,6 @@ def read_include_file() -> dict[str, str]:
                 for token in split(r"/{%s/}" % RE_SUBSTR_CHARSET, key):
                     if not token.isidentifier() and token != "":
                         print_error("Invalid sub string key")
-
             else:
                 if not key.isidentifier():
                     print_error("Invalid sub string key")
