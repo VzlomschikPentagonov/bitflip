@@ -147,6 +147,7 @@ def parse_substr_expr(substr_expr: str,
             key_list.append(parse_sse_arg(arg, sub_strs))
         else:
             key_list.append(parse_digit_arg(arg, sub_strs))
+    # all_keys: list[str] = [key for arg_keys in key_list for key in arg_keys]
     return (num_args, list({string: None for string in
                             [key for arg_keys in key_list
                                  for key in arg_keys]}.keys()))
