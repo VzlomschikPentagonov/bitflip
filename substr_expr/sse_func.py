@@ -21,8 +21,6 @@ def pick_keys(key_list: list[str],
         match_str = f"^{kwargs['keyword']}$"
     for key in sub_strs.keys():
         if len(key) in lengths:
-            if exclude:
-                continue
             key_list.append(key)
         elif match(match_str, key):
             if exclude:
@@ -41,6 +39,8 @@ def parse_digit_arg(arg: str,
         return key_list
     if match(RE_DIGIT_ARG, arg):
         split_arg: list[str] = split(RE_SPLIT_DIGIT_ARG, arg)
+        if '~' in arg:
+            split_arg = split_arg[1:]
         if split_arg[START] == "":
             if split_arg[END] != "":
                 range_ = [*range(1, int(split_arg[END]) + 1)]
@@ -61,7 +61,7 @@ def parse_digit_arg(arg: str,
                     range_ = [*range(int(split_arg[START]),
                                      int(split_arg[END]) + 1,
                                      int(split_arg[STEP]))]
-        if '^' in arg:
+        if '~' in arg:
             range_inv: list[int] = []
             for length in [len(key) for key in sub_strs.keys()]:
                 if length not in range_:
@@ -84,12 +84,12 @@ def parse_str_arg(arg: str,
     key_list: list[kwargs["strip"]] = []
     exclude: bool = False
     arg = arg.lstrip(strip)
+    if '~' in arg:
+        print(arg)
+        arg = arg.rstrip('~')
+        exclude = True
     if arg[0] == '0' and kwargs["keyword"] == True:
         arg = arg.replace('0', "", 1)
-    if '^' in arg:
-        print(arg)
-        arg = arg.rstrip('^')
-        exclude = True
     if kwargs["starts_w"]:
         pick_keys(key_list, sub_strs, [], starts_w = arg,
                   ends_w = STR_DEFAULT, keyword = STR_DEFAULT)
@@ -106,19 +106,20 @@ def parse_sse_arg(arg: str,
     if arg == "":
         return parse_digit_arg(arg, sub_strs)
     match arg[START]:
-        case '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '-' | '^':
+        case ('1' | '2' | '3' | '4' | '5' | '6' |
+              '7' | '8' | '9' | '-' | '~'):
             key_list: list[str] = parse_digit_arg(arg, sub_strs)
-        case '/':
+        case '/' | '~':
             key_list: list[str] = parse_str_arg(arg, sub_strs,
                                                 strip = '/', starts_w = True,
                                                 ends_w = False,
                                                 keyword = False)
-        case '\\' | '^':
+        case '\\' | '~':
             key_list: list[str] = parse_str_arg(arg, sub_strs,
                                                 strip = '\\', ends_w = True,
                                                 starts_w = False,
                                                 keyword = False)
-        case '0' | '^' | _:
+        case '0' | '~' | _:
             key_list: list[str] = parse_str_arg(arg, sub_strs, keyword = True,
                                                 starts_w = False,
                                                 ends_w = False)
