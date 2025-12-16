@@ -84,7 +84,7 @@ def parse_str_arg(arg: str,
     key_list: list[kwargs["strip"]] = []
     exclude: bool = False
     arg = arg.lstrip(strip)
-    if arg[0] == '0':
+    if arg[0] == '0' and kwargs["keyword"] == True:
         arg = arg.replace('0', "", 1)
     if '^' in arg:
         print(arg)
@@ -113,12 +113,12 @@ def parse_sse_arg(arg: str,
                                                 strip = '/', starts_w = True,
                                                 ends_w = False,
                                                 keyword = False)
-        case '\\':
+        case '\\' | '^':
             key_list: list[str] = parse_str_arg(arg, sub_strs,
                                                 strip = '\\', ends_w = True,
                                                 starts_w = False,
                                                 keyword = False)
-        case '0' | _:
+        case '0' | '^' | _:
             key_list: list[str] = parse_str_arg(arg, sub_strs, keyword = True,
                                                 starts_w = False,
                                                 ends_w = False)
